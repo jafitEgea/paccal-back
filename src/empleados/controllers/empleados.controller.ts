@@ -58,6 +58,19 @@ export class EmpleadosController {
     } catch (error) { throw error }
   }
 
+  @Get('nombres/:nombre')
+  async getEmployeesNamesByFullName(@Param('nombre') fullName: string) {
+    try {
+      const data = await this.empleadosService.findNamesByFullName(fullName);
+      return {
+        success: true,
+        action: Constants.SELECT,
+        data,
+        message: 'Empleado encontrado exitosamente',
+      };
+    } catch (error) { throw error }
+  }
+
   @Post('/verify')
   @ApiBody({ type: CreateEmpleadoDto })
   async employeeExists(@Body() body: UpdateEmpleadoDto) {
@@ -113,6 +126,12 @@ export class EmpleadosController {
         data,
         message: 'Empleado eliminado exitosamente',
       };
-    } catch (error) { throw error }
+    } catch (error) {
+      if (String(error).includes("includes related records")) {
+        const msg = "Existen registros relacionados a este elemento"
+        throw new BadRequestException(msg);
+      }
+      throw error;
+    }
   }
 }

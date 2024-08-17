@@ -68,6 +68,19 @@ export class ContratosController {
     } catch (error) { throw error }
   }
 
+  @Get('contratista/reciente/:id')
+  async getMostRecentContractByIdContractor(@Param('id') id_contratista: number) {
+    try {
+      const data = await this.contratosService.findMostRecentContractByIdContractor(id_contratista);
+      return {
+        success: true,
+        action: Constants.SELECT,
+        data,
+        message: 'Contrato encontrado exitosamente',
+      };
+    } catch (error) { throw error }
+  }
+
   @Get('contratista/nombre/:nombre')
   async getContractByNameContractor(@Param('nombre') nombre: string) {
     try {
@@ -86,6 +99,20 @@ export class ContratosController {
   async getContractByNumOrNameContractor(@Body() body: ContractSearchDto) {
     try {
       const data = await this.contratosService.findByNumOrNameContractor(body);
+      return {
+        success: true,
+        action: Constants.SELECT,
+        data,
+        message: 'Contrato encontrado exitosamente',
+      };
+    } catch (error) { throw error }
+  }
+
+  @Post('contratista-num')
+  @ApiBody({ type: ContractSearchDto })
+  async getContractsNumsByNumAndNameContractor(@Body() body: ContractSearchDto) {
+    try {
+      const data = await this.contratosService.findNumsByNumAndNameContractor(body);
       return {
         success: true,
         action: Constants.SELECT,

@@ -1,15 +1,15 @@
-export function formatDateForConditions (dateString: string): string  {
+export function formatDateForConditions(dateString: string): string {
   // Parse the date string to a Date object
   const date = new Date(dateString);
-  
+
   // Extract the components of the date
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
   const day = date.getDate().toString().padStart(2, '0');
   const hours = date.getHours().toString().padStart(2, '0');
   const minutes = date.getMinutes().toString().padStart(2, '0');
-  const seconds = date.getSeconds().toString().padStart(2, '0');  
-  
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+
   // Format the date as required for Access queries
   return `#${year}-${month}-${day} ${hours}:${minutes}:${seconds}#`;
 }
@@ -70,3 +70,13 @@ export function formatOnlyDateForAccess(dateString: string): string {
   const formattedDate = `#${datePart}#`;
   return formattedDate;
 }
+
+export function getDateAccessFormat(date: string) {
+  const datePart = date.includes('T') ? date.split('T')[0] : (date.includes(' ') ? date.split(' ')[0] : null);
+  return datePart;
+}
+
+// export function getDateFormat(date: string) {
+//   const datePart = date.split('T')[0];
+//   return datePart;
+// }

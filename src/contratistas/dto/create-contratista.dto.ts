@@ -28,3 +28,16 @@ export class CreateContratistaDto {
     @IsDateString()
     fecha_modificacion?: Date;
 }
+
+export class ContratistaSearchDto {
+
+    @IsOptional()
+    @IsString()
+    @Transform(({ value }) => value?.trim())
+    nombre: string;
+
+    @IsOptional()
+    @IsString()
+    @Transform(({ value }) => value?.trim())
+    tipo: string
+}

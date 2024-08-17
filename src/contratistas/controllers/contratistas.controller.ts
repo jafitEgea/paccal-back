@@ -2,7 +2,7 @@ import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, U
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { Constants } from 'src/assets/environment/constants';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
-import { CreateContratistaDto } from '../dto/create-contratista.dto';
+import { ContratistaSearchDto, CreateContratistaDto } from '../dto/create-contratista.dto';
 import { UpdateContratistaDto } from '../dto/update-contratista.dto';
 import { ContratistasService } from '../services/contratistas.service';
 
@@ -17,6 +17,25 @@ export class ContratistasController {
   async getAllContractors() {
     try {
       const data = await this.contratistasService.findAll();
+      return {
+        success: true,
+        action: Constants.SELECT,
+        data,
+        message: 'Contratistas encontrados exitosamente',
+      };
+    } catch (error) {
+      return {
+        success: false,
+        action: Constants.SELECT,
+        message: error.message
+      };
+    }
+  }
+
+  @Get('all/:type')
+  async getAllContractorsByType(@Param('type') type: string) {
+    try {
+      const data = await this.contratistasService.findAllByType(type);
       return {
         success: true,
         action: Constants.SELECT,
@@ -54,6 +73,46 @@ export class ContratistasController {
         action: Constants.SELECT,
         data,
         message: 'Contratista encontrado exitosamente',
+      };
+    } catch (error) { throw error }
+  }
+
+  @Post('nombre/nombre-tipo')
+  @ApiBody({ type: ContratistaSearchDto })
+  async getContractorByNameAndType(@Body() body: ContratistaSearchDto) {
+    try {
+      const data = await this.contratistasService.findOneByNameAndType(body);
+      return {
+        success: true,
+        action: Constants.SELECT,
+        data,
+        message: 'Contratista encontrado exitosamente',
+      };
+    } catch (error) { throw error }
+  }
+
+  @Get('nombres/:nombre')
+  async getContractorsNamesByName(@Param('nombre') name: string) {
+    try {
+      const data = await this.contratistasService.findNamesByName(name);
+      return {
+        success: true,
+        action: Constants.SELECT,
+        data,
+        message: 'Contratista encontrado exitosamente',
+      };
+    } catch (error) { throw error }
+  }
+
+  @Post('nombres/nombre-tipo')
+  async getContractorsNamesByNameAndType(@Body() body: ContratistaSearchDto) {
+    try {
+      const data = await this.contratistasService.findNamesByNameAndType(body);
+      return {
+        success: true,
+        action: Constants.SELECT,
+        data,
+        message: 'Contratistas encontrados exitosamente',
       };
     } catch (error) { throw error }
   }
@@ -113,6 +172,12 @@ export class ContratistasController {
         data,
         message: 'Contratista eliminado exitosamente',
       };
-    } catch (error) { throw error }
+    } catch (error) {
+      if (String(error).includes("includes related records")) {
+        const msg = "Existen registros relacionados a este elemento"
+        throw new BadRequestException(msg);
+      }
+      throw error;
+    }
   }
 }

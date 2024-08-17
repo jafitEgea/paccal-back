@@ -9,7 +9,7 @@ export class CuentasCobroRequisitosService {
   constructor(private accessService: AccessService) { }
 
   async findAll() {
-    const query = `SELECT * from CuentasCobroRequisitos;`;
+    const query = `SELECT TOP 50 * from CuentasCobroRequisitos;`;
 
     const result = await this.accessService.executeQuery(query);
 

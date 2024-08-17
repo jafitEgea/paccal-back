@@ -1,53 +1,79 @@
-import { IsArray, IsDateString, IsNotEmpty, IsOptional, IsPositive, IsString } from "class-validator";
+import { Transform } from "class-transformer";
+import { IsArray, IsDateString, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString } from "class-validator";
 import { CreateCuentasCobroRequisitoDto } from "src/cuentas-cobro-requisitos/dto/create-cuentas-cobro-requisito.dto";
 
 export class CreateCuentasCobroDto {
 
-    @IsPositive()
     @IsNotEmpty()
+    @IsPositive()
     id_contrato: number;
 
-    @IsPositive()
     @IsNotEmpty()
+    @IsPositive()
     id_aprobador: number;
 
-    @IsDateString()
     @IsOptional()
+    @IsDateString()
     fecha_aprobacion?: Date;
 
-    @IsPositive()
     @IsNotEmpty()
+    @IsPositive()
     id_revisor: number;
 
-    @IsDateString()
     @IsOptional()
-    fecha_revision?: Date;
-
     @IsString()
-    @IsOptional()
     observaciones?: string;
 
+    @IsOptional()
     @IsString()
-    @IsNotEmpty()
-    oficina_receptora: string;
+    oficina_receptora?: string;
 
-    @IsDateString()
     @IsNotEmpty()
+    @IsDateString()
     fecha_inicial: Date;
 
-    @IsDateString()
     @IsNotEmpty()
+    @IsDateString()
     fecha_final: Date;
 
-    @IsString()
     @IsOptional()
+    @IsString()
+    @Transform(({ value }) => value?.trim())
+    @Transform(({ value }) => value?.toUpperCase())
     periodo?: string;
 
-    @IsString()
     @IsOptional()
+    @IsString()
     url?: string;
+
+    @IsOptional()
+    @IsDateString()
+    fecha_creacion?: Date;
+
+    @IsOptional()
+    @IsDateString()
+    fecha_modificacion?: Date;
 
     @IsArray()
     requisitos: CreateCuentasCobroRequisitoDto[];
+}
+
+export class CuentaCobroSearch {
+
+    @IsOptional()
+    @IsNumber()
+    id_cuentacobro?: number;
+
+    @IsOptional()
+    @IsString()
+    nombre_contratista?: string;
+
+    @IsOptional()
+    @IsString()
+    num_contrato?: string;
+
+    @IsOptional()
+    @IsString()
+    nombre_revisor?: string;
 
 }

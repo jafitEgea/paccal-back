@@ -82,6 +82,8 @@ export class RequisitosService {
                          VALUES( '${nombre}', '${tipo}', 1 )`;
     const result = await this.accessService.executeQuery(queryInsert);
 
+    if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
+
     return result;
   }
 
@@ -94,12 +96,15 @@ export class RequisitosService {
                    WHERE [id_requisito] = ${id};`;
     const result = await this.accessService.executeQuery(query);
 
+    if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
+
     return result;
   }
 
   async delete(id: number) {
     const query = `UPDATE Requisitos SET estado = 0 WHERE id_requisito = ${id}`;
     const result = await this.accessService.executeQuery(query);
+    if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
     return result;
   }
 }

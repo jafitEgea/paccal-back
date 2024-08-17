@@ -7,18 +7,20 @@ import { CuentasCobroRequisitosModule } from './cuentas-cobro-requisitos/cuentas
 import { CuentasCobroModule } from './cuentas-cobro/cuentas-cobro.module';
 import { EmpleadosModule } from './empleados/empleados.module';
 import { RequisitosModule } from './requisitos/requisitos.module';
+import { RevisionesModule } from './revisiones/revisiones.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
 
 @Module({
   imports: [
     AccessModule,
     AuthModule,
+    CuentasCobroModule,
+    RequisitosModule,
+    CuentasCobroRequisitosModule,
+    RevisionesModule,
     ContratistasModule,
     ContratosModule,
-    CuentasCobroRequisitosModule,
-    CuentasCobroModule,
     EmpleadosModule,
-    RequisitosModule,
     UsuariosModule,
   ],
   controllers: [],

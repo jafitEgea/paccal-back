@@ -1,17 +1,17 @@
-import { IsNotEmpty, IsPositive } from "class-validator";
+import { IsNotEmpty, IsNumber } from "class-validator";
 
 export class CreateCuentasCobroRequisitoDto {
 
-    @IsPositive()
     @IsNotEmpty()
+    @IsNumber()
     id_cuentacobro: number;
 
-    @IsPositive()
     @IsNotEmpty()
+    @IsNumber()
     id_requisito: number;
 
-    @IsPositive()
     @IsNotEmpty()
+    @IsNumber()
     marcado: number;
 
 }

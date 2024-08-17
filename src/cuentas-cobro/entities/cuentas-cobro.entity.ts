@@ -10,8 +10,6 @@ export class CuentasCobroEntity {
 
     id_revisor: number;
 
-    fecha_revision: Date;
-
     observaciones: string;
 
     oficina_receptora: string;
@@ -23,5 +21,9 @@ export class CuentasCobroEntity {
     periodo: string;
 
     url: string;
+
+    fecha_creacion: Date;
+
+    fecha_modificacion: Date;
 
 }

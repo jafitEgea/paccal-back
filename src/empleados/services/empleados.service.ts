@@ -15,6 +15,7 @@ export class EmpleadosService {
                     Empleados.id_empleado,
                     Personas.nombre AS nombres,
                     Personas.apellidos,
+                    TRIM((Personas.nombre & ' ' & Personas.apellidos)) AS nombre_completo,
                     Empleados.cargo,
                     Personas.fecha_creacion,
                     Personas.fecha_modificacion,
@@ -35,6 +36,7 @@ export class EmpleadosService {
     const query = `SELECT Empleados.id_empleado,
                     Personas.nombre AS nombres,
                     Personas.apellidos, 
+                    TRIM((Personas.nombre & ' ' & Personas.apellidos)) AS nombre_completo,
                     Empleados.cargo, 
                     Personas.fecha_creacion, 
                     Personas.fecha_modificacion, 
@@ -54,10 +56,25 @@ export class EmpleadosService {
     const query = `SELECT Empleados.id_empleado,
                     Personas.nombre AS nombres,
                     Personas.apellidos, 
+                    TRIM((Personas.nombre & ' ' & Personas.apellidos)) AS nombre_completo,
                     Empleados.cargo, 
                     Personas.fecha_creacion, 
                     Personas.fecha_modificacion, 
                     Personas.estado
+                   FROM Personas INNER JOIN Empleados ON Personas.id_persona = Empleados.id_empleado
+                   WHERE [nombre] & ' ' & [apellidos] LIKE '%${fullName}%' AND [estado] = 1;`
+    const result = await this.accessService.executeQuery(query);
+
+    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Empleado no encontrado");
+    if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
+    if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
+
+    return result;
+  }
+
+  async findNamesByFullName(fullName: string) {
+    const query = `SELECT Empleados.id_empleado, 
+                    TRIM((Personas.nombre & ' ' & Personas.apellidos)) AS nombre_completo
                    FROM Personas INNER JOIN Empleados ON Personas.id_persona = Empleados.id_empleado
                    WHERE [nombre] & ' ' & [apellidos] LIKE '%${fullName}%' AND [estado] = 1;`
     const result = await this.accessService.executeQuery(query);
@@ -99,22 +116,38 @@ export class EmpleadosService {
 
     const queryInsert = `INSERT INTO Personas(nombre, apellidos, fecha_creacion, estado)
                          VALUES( '${nombres}', '${apellidos}', ${f_creacion}, 1 )`;
-    await this.accessService.executeQuery(queryInsert);
+    let result = await this.accessService.executeQuery(queryInsert);
+
+    if (JSON.stringify(result).includes('Error al ejecutar la consulta')) {
+      await this.accessService.rollbackTransaction();
+      throw new InternalServerErrorException(JSON.stringify(result));
+    }
 
     const querySelect = `SELECT [id_persona] FROM [Personas] 
                          WHERE [fecha_creacion] = ${f_creacion} 
                          ORDER BY [id_persona] DESC;`;
-    const result = await this.accessService.executeQuery(querySelect);
+    result = await this.accessService.executeQuery(querySelect);
+
+    if (JSON.stringify(result).includes('Error al ejecutar la consulta')) {
+      await this.accessService.rollbackTransaction();
+      throw new InternalServerErrorException(JSON.stringify(result));
+    }
+
     const id_persona = result[0].id_persona;
 
     const queryInsert2 = `INSERT INTO Empleados(id_empleado, cargo)
                           VALUES( ${id_persona}, '${cargo}')`;
-    const result2 = await this.accessService.executeQuery(queryInsert2);
+    result = await this.accessService.executeQuery(queryInsert2);
+
+    if (JSON.stringify(result).includes('Error al ejecutar la consulta')) {
+      await this.accessService.rollbackTransaction();
+      throw new InternalServerErrorException(JSON.stringify(result));
+    }
 
     // END TRANSACTION
     await this.accessService.commitTransaction();
 
-    return result2;
+    return result;
   }
 
   async update(id: number, empleado: UpdateEmpleadoDto) {
@@ -125,14 +158,19 @@ export class EmpleadosService {
     f_modificacion = formatDateForAccess(fecha_modificacion.toString());
 
     // BEGIN TRANSACTION
-    await this.accessService.connection.beginTransaction();
+    await this.accessService.executeTransaction();
 
     const query = `UPDATE Personas SET 
                     [nombre] = '${nombres}', 
                     [apellidos] = '${apellidos}',
                     [fecha_modificacion] = ${f_modificacion}
                    WHERE [id_persona] = ${id};`;
-    await this.accessService.executeQuery(query);
+    const result1 = await this.accessService.executeQuery(query);
+
+    if (JSON.stringify(result1).includes('Error al ejecutar la consulta')) {
+      await this.accessService.rollbackTransaction();
+      throw new InternalServerErrorException(JSON.stringify(result1));
+    }
 
     const query2 = `UPDATE Empleados SET
                     [cargo] = '${cargo}'
@@ -140,19 +178,39 @@ export class EmpleadosService {
 
     const result = await this.accessService.executeQuery(query2);
 
+    if (JSON.stringify(result).includes('Error al ejecutar la consulta')) {
+      await this.accessService.rollbackTransaction();
+      throw new InternalServerErrorException(JSON.stringify(result));
+    }
+
     // END TRANSACTION
-    await this.accessService.connection.commit();
+    await this.accessService.commitTransaction();
 
     return result;
   }
 
   async delete(id: number) {
+    // BEGIN TRANSACTION
+    await this.accessService.executeTransaction();
+
     // const query =  `DELETE FROM Personas WHERE id_persona = ${id}`;
     const query = `UPDATE Personas SET estado = 0 WHERE id_persona = ${id}`;
-    await this.accessService.executeQuery(query);
+    let result = await this.accessService.executeQuery(query);
+    if (JSON.stringify(result).includes('Error al ejecutar la consulta')) {
+      await this.accessService.rollbackTransaction();
+      throw new InternalServerErrorException(JSON.stringify(result));
+    }
 
     const query2 = `DELETE FROM Empleados WHERE id_empleado = ${id}`;
-    const result = await this.accessService.executeQuery(query2);
+    result = await this.accessService.executeQuery(query2);
+    if (JSON.stringify(result).includes('Error al ejecutar la consulta')) {
+      await this.accessService.rollbackTransaction();
+      throw new InternalServerErrorException(JSON.stringify(result));
+    }
+
+    // END TRANSACTION
+    await this.accessService.commitTransaction();
+
     return result;
   }
 }

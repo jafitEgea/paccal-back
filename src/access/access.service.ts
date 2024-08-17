@@ -59,8 +59,11 @@ export class AccessService {
       const result = await this.connection.query(query);
       return result;
     } catch (error) {
-      console.error('Error al ejecutar la consulta:', error);
-      return `Error al ejecutar la consulta: ${error}`;
+      if (error.odbcErrors[0].message) {
+        return `Error al ejecutar la consulta: ${error.odbcErrors[0].message}`;
+      } else {
+        return `Error al ejecutar la consulta: ${error}`;
+      }
     }
   }
 
@@ -70,6 +73,10 @@ export class AccessService {
 
   async commitTransaction() {
     await this.connection.commit();
+  }
+
+  async rollbackTransaction() {
+    await this.connection.rollback();
   }
 
 }

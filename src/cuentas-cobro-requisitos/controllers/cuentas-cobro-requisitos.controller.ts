@@ -14,9 +14,9 @@ import { CuentasCobroRequisitosService } from '../services/cuentas-cobro-requisi
 @Controller('cuentas-cobro-requisitos')
 export class CuentasCobroRequisitosController {
   constructor(private readonly cuentasCobroRequisitosService: CuentasCobroRequisitosService,
-              private readonly cuentasCobroService: CuentasCobroService,
-              private readonly requisitosService: RequisitosService,
-  ) {}
+    private readonly cuentasCobroService: CuentasCobroService,
+    private readonly requisitosService: RequisitosService,
+  ) { }
 
   @Get()
   async findAll() {
@@ -29,10 +29,10 @@ export class CuentasCobroRequisitosController {
         message: 'Requisitos de cuentas de cobro encontrados exitosamente',
       };
     } catch (error) {
-      return { 
-          success: false,
-          action: Constants.SELECT,
-          message: error.message
+      return {
+        success: false,
+        action: Constants.SELECT,
+        message: error.message
       };
     }
   }
@@ -53,33 +53,39 @@ export class CuentasCobroRequisitosController {
   @Post('/by-cuentacobro-requisito')
   @ApiBody({ type: CreateCuentasCobroRequisitoDto })
   async findByIdContractAndIdRequirement(@Body() body: UpdateCuentasCobroRequisitoDto) {
-    if( !( await this.cuentasCobroService.accountReceivableExistsById(body.id_cuentacobro) ) ){
-      throw new BadRequestException("Cuenta de cobro no encontrada");
-    }
-    if( !( await this.requisitosService.requirementExistsById(body.id_requisito) ) ){
-      throw new BadRequestException("Requisito no encontrado");
-    }
-    return await this.cuentasCobroRequisitosService.findByIdContratoYIdRequisito(body);
+    try {
+      if (!(await this.cuentasCobroService.accountReceivableExistsById(body.id_cuentacobro))) {
+        throw new BadRequestException("Cuenta de cobro no encontrada");
+      }
+      if (!(await this.requisitosService.requirementExistsById(body.id_requisito))) {
+        throw new BadRequestException("Requisito no encontrado");
+      }
+      return await this.cuentasCobroRequisitosService.findByIdContratoYIdRequisito(body);
+
+    } catch (error) { throw error }
+
   }
 
   @Post('/verify')
   @ApiBody({ type: CreateCuentasCobroRequisitoDto })
   async cuentaCobrorequirementExists(@Body() body: UpdateCuentasCobroRequisitoDto) {
-    if( !( await this.cuentasCobroService.accountReceivableExistsById(body.id_cuentacobro) ) ){
+    if (!(await this.cuentasCobroService.accountReceivableExistsById(body.id_cuentacobro))) {
       throw new BadRequestException("Cuenta de cobro no encontrada");
     }
-    if( !( await this.requisitosService.requirementExistsById(body.id_requisito) ) ){
+    if (!(await this.requisitosService.requirementExistsById(body.id_requisito))) {
       throw new BadRequestException("Requisito no encontrado");
     }
     return await this.cuentasCobroRequisitosService.cuentaCobrorequirementExists(body);
   }
 
   @Post()
+  @ApiBody({ type: CreateCuentasCobroRequisitoDto })
   async create(@Body() body: CreateCuentasCobroRequisitoDto[]) {
     return this.cuentasCobroRequisitosService.create(body);
   }
 
   @Put(':id')
+  @ApiBody({ type: CreateCuentasCobroRequisitoDto })
   async update(@Body() body: UpdateCuentasCobroRequisitoDto[]) {
     return this.cuentasCobroRequisitosService.update(body);
   }

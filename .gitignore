@@ -57,3 +57,4 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 paccal_db.accdb
 paccal_db.laccdb
+.vscode
