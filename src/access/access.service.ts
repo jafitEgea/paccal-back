@@ -46,7 +46,7 @@ export class AccessService {
     }
 
     try {
-      //CONFIGURAR DSN EN EL PC -> ORIGENES DE DATOS 64-BIT -- 'paccal'
+      //CONFIGURAR DSN EN EL PC -> ORIGENES DE DATOS 64-BIT -- 'paccal-dns'
       this.connection = await odbc.connect(connectionConfig);
       console.log('Conexión a la base de datos MS Access establecida');
     } catch (error) {

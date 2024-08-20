@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AccessModule } from './access/access.module';
+import { AuditoriaModule } from './auditoria/auditoria.module';
 import { AuthModule } from './auth/auth.module';
 import { ContratistasModule } from './contratistas/contratistas.module';
 import { ContratosModule } from './contratos/contratos.module';
@@ -13,14 +14,15 @@ import { UsuariosModule } from './usuarios/usuarios.module';
 @Module({
   imports: [
     AccessModule,
+    AuditoriaModule,
     AuthModule,
-    CuentasCobroModule,
-    RequisitosModule,
-    CuentasCobroRequisitosModule,
-    RevisionesModule,
     ContratistasModule,
     ContratosModule,
+    CuentasCobroModule,
+    CuentasCobroRequisitosModule,
     EmpleadosModule,
+    RequisitosModule,
+    RevisionesModule,
     UsuariosModule,
   ],
   controllers: [],
