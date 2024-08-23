@@ -11,7 +11,7 @@ export class AuditoriaService {
   constructor(private accessService: AccessService) { }
 
   async findAll(): Promise<AuditoriaEntity[]> {
-    const query = `SELECT TOP 50 *
+    const query = `SELECT TOP 100 *
                    FROM Auditoria
                    ORDER BY [id_auditoria] DESC;`;
     const result = await this.accessService.executeQuery(query);

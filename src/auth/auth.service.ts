@@ -14,7 +14,7 @@ export class AuthService {
     ) { }
 
     async register(usuario: CreateUsuarioDto) {
-        const { nombres, apellidos, contraseña, nombre_usuario, rol, fecha_creacion } = usuario;
+        const { nombres, apellidos, contraseña, nombre_usuario, cargo, rol, fecha_creacion } = usuario;
         if (await this.usuariosService.userExistsByUserName(nombre_usuario)) {
             throw new BadRequestException("Usuario ya existente");
         }
@@ -26,6 +26,7 @@ export class AuthService {
             apellidos,
             nombre_usuario,
             contraseña,
+            cargo,
             rol,
             fecha_creacion,
         });

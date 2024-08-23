@@ -10,6 +10,8 @@ export class UsuarioEntity {
 
     contraseña: string;
 
+    cargo?: string;
+
     rol: string;
 
     fecha_creacion?: Date;

@@ -24,6 +24,11 @@ export class CreateUsuarioDto {
     @IsString()
     contraseña: string;
 
+    @IsOptional()
+    @IsString()
+    @Transform(({ value }) => value?.trim())
+    cargo: string;
+
     @IsNotEmpty()
     @IsString()
     rol: string;

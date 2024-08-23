@@ -18,6 +18,7 @@ export class UsuariosService {
                         Personas.apellidos, 
                         Usuarios.nombre_usuario, 
                         Usuarios.contraseña,
+                        Usuarios.cargo,
                         Usuarios.rol,
                         Personas.fecha_creacion,
                         Personas.fecha_modificacion,
@@ -41,6 +42,7 @@ export class UsuariosService {
                         Personas.apellidos, 
                         Usuarios.nombre_usuario, 
                         Usuarios.contraseña,
+                        Usuarios.cargo,
                         Usuarios.rol, 
                         Personas.fecha_creacion,
                         Personas.fecha_modificacion,
@@ -62,6 +64,7 @@ export class UsuariosService {
                         Personas.apellidos, 
                         Usuarios.nombre_usuario, 
                         Usuarios.contraseña,
+                        Usuarios.cargo,
                         Usuarios.rol,
                         Personas.fecha_creacion,
                         Personas.fecha_modificacion,
@@ -83,6 +86,7 @@ export class UsuariosService {
                         Personas.apellidos, 
                         Usuarios.nombre_usuario, 
                         Usuarios.contraseña,
+                        Usuarios.cargo,
                         Usuarios.rol,
                         Personas.fecha_creacion,
                         Personas.fecha_modificacion,
@@ -107,6 +111,7 @@ export class UsuariosService {
                         Personas.apellidos, 
                         Usuarios.nombre_usuario, 
                         Usuarios.contraseña,
+                        Usuarios.cargo,
                         Usuarios.rol,
                         Personas.fecha_creacion,
                         Personas.fecha_modificacion,
@@ -148,7 +153,7 @@ export class UsuariosService {
     }
 
     async create(usuario: CreateUsuarioDto) {
-        const { nombres, apellidos, nombre_usuario, contraseña, rol, fecha_creacion } = usuario;
+        const { nombres, apellidos, nombre_usuario, contraseña, cargo, rol, fecha_creacion } = usuario;
         let f_creacion = null;
 
         if (!fecha_creacion) throw new BadRequestException("fecha_creacion faltante");
@@ -181,8 +186,8 @@ export class UsuariosService {
 
         const contraseñaHash = await bcryptjs.hash(contraseña, 10);
 
-        const queryInsert2 = `INSERT INTO Usuarios(id_usuario, nombre_usuario, contraseña, rol)
-                              VALUES( ${id_persona} , '${nombre_usuario}', '${contraseñaHash}', '${rol}' )`;
+        const queryInsert2 = `INSERT INTO Usuarios(id_usuario, nombre_usuario, contraseña, cargo, rol)
+                              VALUES( ${id_persona} , '${nombre_usuario}', '${contraseñaHash}', '${cargo}','${rol}' )`;
         const result2 = await this.accessService.executeQuery(queryInsert2);
 
         // END TRANSACTION
@@ -193,7 +198,7 @@ export class UsuariosService {
 
     //TODO: DESDE EL FRONTED, CAPTURAR EL ERROR CUANDO SE QUIERE ACTULIZAR EL USERNAME POR OTRO USERNAME DE OTRO USUARIO
     async update(id: number, usuario: UpdateUsuarioDto) {
-        const { nombres, apellidos, nombre_usuario, contraseña, rol, fecha_modificacion } = usuario;
+        const { nombres, apellidos, nombre_usuario, contraseña, cargo, rol, fecha_modificacion } = usuario;
         let f_modificacion = null;
 
         if (!fecha_modificacion) throw new BadRequestException("fecha_modificacion faltante");
@@ -221,9 +226,11 @@ export class UsuariosService {
 
             cond = `[nombre_usuario] = '${nombre_usuario}',
                     [contraseña] = '${contraseñaHash}',
+                    [cargo] = '${cargo}',
                     [rol] = '${rol}'`
         } else {
             cond = `[nombre_usuario] = '${nombre_usuario}',
+                    [cargo] = '${cargo}',
                     [rol] = '${rol}'`
         }
 

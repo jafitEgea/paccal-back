@@ -20,9 +20,11 @@ export class CuentasCobroService {
                     c.objeto,
                     cc.id_aprobador,
                     TRIM((p2.nombre & ' ' & p2.apellidos)) AS nombre_aprobador,
+                    emp.cargo AS cargo_aprobador,
                     cc.fecha_aprobacion,
                     cc.id_revisor,
                     TRIM((p3.nombre & ' ' & p3.apellidos)) AS nombre_revisor,
+                    us.cargo AS cargo_revisor,                    
                     cc.observaciones,
                     cc.oficina_receptora,
                     cc.fecha_inicial,
@@ -32,12 +34,14 @@ export class CuentasCobroService {
                     cc.fecha_creacion,
                     cc.fecha_modificacion,
                     cc.estado
-                   FROM (((((CuentasCobro cc
+                   FROM (((((((CuentasCobro cc
                     INNER JOIN Contratos c ON cc.id_contrato = c.id_contrato )
                     INNER JOIN Contratistas ca ON c.id_contratista = ca.id_contratista )
                     INNER JOIN Personas p1 ON c.id_contratista = p1.id_persona )
                     INNER JOIN Personas p2 ON cc.id_aprobador = p2.id_persona )
+                    INNER JOIN Empleados emp ON p2.id_persona = emp.id_empleado )
                     INNER JOIN Personas p3 ON cc.id_revisor = p3.id_persona )
+                    INNER JOIN Usuarios us ON p3.id_persona = us.id_usuario )
                    WHERE cc.[estado] = 1
                    ORDER BY cc.[id_cuentacobro] DESC;`;
     const result = await this.accessService.executeQuery(query);
@@ -59,9 +63,11 @@ export class CuentasCobroService {
                     c.objeto,
                     cc.id_aprobador,
                     TRIM((p2.nombre & ' ' & p2.apellidos)) AS nombre_aprobador,
+                    emp.cargo AS cargo_aprobador,
                     cc.fecha_aprobacion,
                     cc.id_revisor,
                     TRIM((p3.nombre & ' ' & p3.apellidos)) AS nombre_revisor,
+                    us.cargo AS cargo_revisor,                    
                     cc.observaciones,
                     cc.oficina_receptora,
                     cc.fecha_inicial,
@@ -71,12 +77,14 @@ export class CuentasCobroService {
                     cc.fecha_creacion,
                     cc.fecha_modificacion,
                     cc.estado
-                   FROM (((((CuentasCobro cc
+                   FROM (((((((CuentasCobro cc
                     INNER JOIN Contratos c ON cc.id_contrato = c.id_contrato )
                     INNER JOIN Contratistas ca ON c.id_contratista = ca.id_contratista )
                     INNER JOIN Personas p1 ON c.id_contratista = p1.id_persona )
                     INNER JOIN Personas p2 ON cc.id_aprobador = p2.id_persona )
+                    INNER JOIN Empleados emp ON p2.id_persona = emp.id_empleado )
                     INNER JOIN Personas p3 ON cc.id_revisor = p3.id_persona )
+                    INNER JOIN Usuarios us ON p3.id_persona = us.id_usuario )
                    WHERE ca.[tipo] LIKE '%${tipo}%' AND cc.[estado] = 1
                    ORDER BY cc.[id_cuentacobro] DESC;`;
     const result = await this.accessService.executeQuery(query);
@@ -129,9 +137,11 @@ export class CuentasCobroService {
   //                   c.objeto,
   //                   cc.id_aprobador,
   //                   TRIM((p2.nombre & ' ' & p2.apellidos)) AS nombre_aprobador,
+  //                   emp.cargo AS cargo_aprobador,
   //                   cc.fecha_aprobacion,
   //                   cc.id_revisor,
   //                   TRIM((p3.nombre & ' ' & p3.apellidos)) AS nombre_revisor,
+  //                   us.cargo AS cargo_revisor,  
   //                   cc.observaciones,
   //                   cc.oficina_receptora,
   //                   cc.fecha_inicial,
@@ -170,9 +180,11 @@ export class CuentasCobroService {
                     c.objeto,
                     cc.id_aprobador,
                     TRIM((p2.nombre & ' ' & p2.apellidos)) AS nombre_aprobador,
+                    emp.cargo AS cargo_aprobador,
                     cc.fecha_aprobacion,
                     cc.id_revisor,
                     TRIM((p3.nombre & ' ' & p3.apellidos)) AS nombre_revisor,
+                    us.cargo AS cargo_revisor,                    
                     cc.observaciones,
                     cc.oficina_receptora,
                     cc.fecha_inicial,
@@ -182,11 +194,14 @@ export class CuentasCobroService {
                     cc.fecha_creacion,
                     cc.fecha_modificacion,
                     cc.estado
-                   FROM ((((CuentasCobro cc
+                   FROM (((((((CuentasCobro cc
                     INNER JOIN Contratos c ON cc.id_contrato = c.id_contrato )
+                    INNER JOIN Contratistas ca ON c.id_contratista = ca.id_contratista )
                     INNER JOIN Personas p1 ON c.id_contratista = p1.id_persona )
                     INNER JOIN Personas p2 ON cc.id_aprobador = p2.id_persona )
+                    INNER JOIN Empleados emp ON p2.id_persona = emp.id_empleado )
                     INNER JOIN Personas p3 ON cc.id_revisor = p3.id_persona )
+                    INNER JOIN Usuarios us ON p3.id_persona = us.id_usuario )
                    WHERE [id_cuentacobro] = ${id} AND cc.[estado] = 1
                    ORDER BY cc.[id_cuentacobro] DESC;`;
     let result = await this.accessService.executeQuery(query);
@@ -218,9 +233,11 @@ export class CuentasCobroService {
                     c.objeto,
                     cc.id_aprobador,
                     TRIM((p2.nombre & ' ' & p2.apellidos)) AS nombre_aprobador,
+                    emp.cargo AS cargo_aprobador,
                     cc.fecha_aprobacion,
                     cc.id_revisor,
                     TRIM((p3.nombre & ' ' & p3.apellidos)) AS nombre_revisor,
+                    us.cargo AS cargo_revisor,                    
                     cc.observaciones,
                     cc.oficina_receptora,
                     cc.fecha_inicial,
@@ -230,12 +247,14 @@ export class CuentasCobroService {
                     cc.fecha_creacion,
                     cc.fecha_modificacion,
                     cc.estado
-                   FROM (((((CuentasCobro cc
+                   FROM (((((((CuentasCobro cc
                     INNER JOIN Contratos c ON cc.id_contrato = c.id_contrato )
                     INNER JOIN Contratistas ca ON c.id_contratista = ca.id_contratista )
                     INNER JOIN Personas p1 ON c.id_contratista = p1.id_persona )
                     INNER JOIN Personas p2 ON cc.id_aprobador = p2.id_persona )
+                    INNER JOIN Empleados emp ON p2.id_persona = emp.id_empleado )
                     INNER JOIN Personas p3 ON cc.id_revisor = p3.id_persona )
+                    INNER JOIN Usuarios us ON p3.id_persona = us.id_usuario )
                    WHERE ( 
                     cc.id_cuentacobro = ${id_cuentacobro} OR
                     c.num_contrato LIKE '%${num_contrato}%' OR
