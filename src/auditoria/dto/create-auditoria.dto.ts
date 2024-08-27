@@ -22,6 +22,7 @@ export class CreateAuditoriaDto {
 
     @IsNotEmpty()
     @IsString()
+    @Transform(({ value }) => value?.trim())
     descripcion: string;
 }
 

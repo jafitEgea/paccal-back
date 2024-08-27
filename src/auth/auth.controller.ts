@@ -1,9 +1,8 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Constants } from 'src/assets/environment/constants';
-import { CreateUsuarioDto, LoginDto } from 'src/usuarios/dto/create-usuario.dto';
+import { LoginDto, RegisterDto } from 'src/usuarios/dto/create-usuario.dto';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './guards/auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -14,7 +13,7 @@ export class AuthController {
     ) { }
 
     @Post('register')
-    async register(@Body() body: CreateUsuarioDto) {
+    async register(@Body() body: RegisterDto) {
         try {
             const data = await this.authService.register(body);
             return {
@@ -34,11 +33,10 @@ export class AuthController {
         } catch (error) { throw error }
     }
 
-    @Get('profile')
-    @UseGuards(AuthGuard)
-    profile(@Request() req) {
-        return req.user;
-    }
-
+    // @Get('profile')
+    // @UseGuards(AuthGuard)
+    // profile(@Request() req) {
+    //     return req.user;
+    // }
 
 }

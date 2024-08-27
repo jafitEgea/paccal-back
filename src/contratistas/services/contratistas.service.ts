@@ -84,7 +84,8 @@ export class ContratistasService {
                     Personas.fecha_modificacion,
                     Personas.estado
                    FROM Personas INNER JOIN Contratistas ON Personas.id_persona = Contratistas.id_contratista
-                   WHERE [nombre] & ' ' & [apellidos] LIKE '%${name}%' AND [estado] = 1`
+                   WHERE [nombre] & ' ' & [apellidos] LIKE '%${name}%' AND [estado] = 1
+                   ORDER BY [id_contratista] DESC;`
     const result = await this.accessService.executeQuery(query);
 
     if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Contratista no encontrado");
@@ -104,7 +105,8 @@ export class ContratistasService {
                     Personas.fecha_modificacion,
                     Personas.estado
                    FROM Personas INNER JOIN Contratistas ON Personas.id_persona = Contratistas.id_contratista
-                   WHERE [nombre] & ' ' & [apellidos] LIKE '%${nombre}%' AND [tipo] LIKE '%${tipo}%' AND [estado] = 1;`
+                   WHERE [nombre] & ' ' & [apellidos] LIKE '%${nombre}%' AND [tipo] LIKE '%${tipo}%' AND [estado] = 1
+                   ORDER BY [id_contratista] DESC;`
     const result = await this.accessService.executeQuery(query);
 
     if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Contratista no encontrado");
@@ -118,7 +120,8 @@ export class ContratistasService {
     const query = `SELECT Contratistas.id_contratista,
                     TRIM((Personas.nombre & ' ' & Personas.apellidos)) AS nombre_completo
                    FROM Personas INNER JOIN Contratistas ON Personas.id_persona = Contratistas.id_contratista
-                   WHERE [nombre] & ' ' & [apellidos] LIKE '%${name}%' AND [estado] = 1`
+                   WHERE [nombre] & ' ' & [apellidos] LIKE '%${name}%' AND [estado] = 1
+                   ORDER BY [id_contratista] DESC;`
     const result = await this.accessService.executeQuery(query);
 
     if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Contratista no encontrado");
@@ -132,7 +135,8 @@ export class ContratistasService {
     const query = `SELECT Contratistas.id_contratista,
                     TRIM((Personas.nombre & ' ' & Personas.apellidos)) AS nombre_completo
                    FROM Personas INNER JOIN Contratistas ON Personas.id_persona = Contratistas.id_contratista
-                   WHERE [nombre] & ' ' & [apellidos] LIKE '%${nombre}%' AND [tipo] LIKE '%${tipo}%' AND [estado] = 1;`
+                   WHERE [nombre] & ' ' & [apellidos] LIKE '%${nombre}%' AND [tipo] LIKE '%${tipo}%' AND [estado] = 1
+                   ORDER BY [id_contratista] DESC;`
     const result = await this.accessService.executeQuery(query);
 
     if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Contratista no encontrado");

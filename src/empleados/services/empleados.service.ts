@@ -42,7 +42,8 @@ export class EmpleadosService {
                     Personas.fecha_modificacion, 
                     Personas.estado
                    FROM Personas INNER JOIN Empleados ON Personas.id_persona = Empleados.id_empleado
-                   WHERE Empleados.id_empleado = ${id} AND [estado] = 1;`
+                   WHERE Empleados.id_empleado = ${id} AND [estado] = 1
+                   ORDER BY [id_empleado] DESC;`
     const result = await this.accessService.executeQuery(query);
 
     if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Empleado no encontrado");
@@ -62,7 +63,8 @@ export class EmpleadosService {
                     Personas.fecha_modificacion, 
                     Personas.estado
                    FROM Personas INNER JOIN Empleados ON Personas.id_persona = Empleados.id_empleado
-                   WHERE [nombre] & ' ' & [apellidos] LIKE '%${fullName}%' AND [estado] = 1;`
+                   WHERE [nombre] & ' ' & [apellidos] LIKE '%${fullName}%' AND [estado] = 1
+                   ORDER BY [id_empleado] DESC;`
     const result = await this.accessService.executeQuery(query);
 
     if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Empleado no encontrado");
@@ -76,7 +78,8 @@ export class EmpleadosService {
     const query = `SELECT Empleados.id_empleado, 
                     TRIM((Personas.nombre & ' ' & Personas.apellidos)) AS nombre_completo
                    FROM Personas INNER JOIN Empleados ON Personas.id_persona = Empleados.id_empleado
-                   WHERE [nombre] & ' ' & [apellidos] LIKE '%${fullName}%' AND [estado] = 1;`
+                   WHERE [nombre] & ' ' & [apellidos] LIKE '%${fullName}%' AND [estado] = 1
+                   ORDER BY [id_empleado] DESC;`
     const result = await this.accessService.executeQuery(query);
 
     if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Empleado no encontrado");

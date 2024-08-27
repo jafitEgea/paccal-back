@@ -261,7 +261,8 @@ export class CuentasCobroService {
                     p1.nombre & ' ' & p1.apellidos LIKE '%${nombre_contratista}%' OR
                     p3.nombre & ' ' & p3.apellidos LIKE '%${nombre_revisor}%' 
                     ) 
-                    AND ca.[tipo] LIKE '%${tipo}%' AND cc.[estado] = 1;`;
+                    AND ca.[tipo] LIKE '%${tipo}%' AND cc.[estado] = 1
+                   ORDER BY cc.[id_cuentacobro] DESC;`;
     let result = await this.accessService.executeQuery(query);
 
     if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Cuenta(s) de cobro no encontrada(s)");

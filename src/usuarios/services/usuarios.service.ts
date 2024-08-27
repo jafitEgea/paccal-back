@@ -48,7 +48,8 @@ export class UsuariosService {
                         Personas.fecha_modificacion,
                         Personas.estado
                        FROM Personas INNER JOIN Usuarios ON Personas.id_persona = Usuarios.id_usuario
-                       WHERE [id_persona] = ${id} AND [estado] = 1;`
+                       WHERE [id_persona] = ${id} AND [estado] = 1
+                       ORDER BY [id_usuario] DESC;`
         const result = await this.accessService.executeQuery(query);
 
         if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Usuario no encontrado");
@@ -70,7 +71,8 @@ export class UsuariosService {
                         Personas.fecha_modificacion,
                         Personas.estado
                        FROM Personas INNER JOIN Usuarios ON Personas.id_persona = Usuarios.id_usuario
-                       WHERE [nombre_usuario] = '${username}' AND [estado] = 1;`;
+                       WHERE [nombre_usuario] = '${username}' AND [estado] = 1
+                       ORDER BY [id_usuario] DESC;`;
         const result = await this.accessService.executeQuery(query);
 
         if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Usuario no encontrado");
@@ -92,7 +94,8 @@ export class UsuariosService {
                         Personas.fecha_modificacion,
                         Personas.estado
                        FROM Personas INNER JOIN Usuarios ON Personas.id_persona = Usuarios.id_usuario
-                       WHERE [nombre] & ' ' & [apellidos] LIKE '%${fullName}%' AND [estado] = 1;`;
+                       WHERE [nombre] & ' ' & [apellidos] LIKE '%${fullName}%' AND [estado] = 1
+                       ORDER BY [id_usuario] DESC;`;
         const result = await this.accessService.executeQuery(query);
 
         if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Usuario no encontrado");
@@ -104,8 +107,7 @@ export class UsuariosService {
 
     //TODO: LA CONTRASEÑA NO SERA OBTENIDA PUESTO QUE ES UN HASH. CAMPO EDITAR CONTRASEÑA VACIO
 
-    async findOneByNameOrUserName(body: UserSearchDto): Promise<UsuarioEntity> {
-        const fullName = body.nombre, username = body.nombre_usuario;
+    async findOneByNameOrUserName({ nombre, nombre_usuario }: UserSearchDto): Promise<UsuarioEntity> {
         const query = `SELECT Usuarios.id_usuario, 
                         Personas.nombre AS nombres, 
                         Personas.apellidos, 
@@ -117,8 +119,9 @@ export class UsuariosService {
                         Personas.fecha_modificacion,
                         Personas.estado
                        FROM Personas INNER JOIN Usuarios ON Personas.id_persona = Usuarios.id_usuario
-                       WHERE ( [nombre] & ' ' & [apellidos] LIKE '%${fullName}%' OR [nombre_usuario] LIKE '%${username}%' )
-                        AND [estado] = 1;`;
+                       WHERE ( [Personas.nombre] & ' ' & [Personas.apellidos] LIKE '%${nombre}%' OR [Usuarios.nombre_usuario] LIKE '%${nombre_usuario}%' )
+                        AND [estado] = 1
+                       ORDER BY [id_usuario] DESC;`;
         const result = await this.accessService.executeQuery(query);
 
         if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Usuario no encontrado");

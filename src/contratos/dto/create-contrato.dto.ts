@@ -1,13 +1,16 @@
+import { Transform } from "class-transformer";
 import { IsDateString, IsNotEmpty, IsOptional, IsPositive, IsString } from "class-validator";
 
 export class CreateContratoDto {
 
     @IsNotEmpty()
     @IsString()
+    @Transform(({ value }) => value?.trim())
     num_contrato: string;
 
     @IsNotEmpty()
     @IsString()
+    @Transform(({ value }) => value?.trim())
     objeto: string;
 
     @IsNotEmpty()

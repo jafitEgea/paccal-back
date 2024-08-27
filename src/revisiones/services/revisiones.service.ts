@@ -47,7 +47,8 @@ export class RevisionesService {
                        FROM ((Revisiones re
                         INNER JOIN Usuarios us ON us.id_usuario = re.id_autor)
                         INNER JOIN Personas pe ON re.id_autor = pe.id_persona)
-                       WHERE [re.id_revision] = ${id} AND [re.estado] = 1;`
+                       WHERE [re.id_revision] = ${id} AND [re.estado] = 1
+                       ORDER BY [id_revision] DESC;`
 
         const result = await this.accessService.executeQuery(query);
         if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Revision no encontrada");

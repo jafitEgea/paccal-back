@@ -22,7 +22,7 @@ export class RequisitosService {
 
   async findOne(id: number): Promise<RequisitoEntity> {
     const query = `SELECT * FROM Requisitos
-                   WHERE [id_requisito] = ${id} AND [estado] = 1;`
+                   WHERE [id_requisito] = ${id} AND [estado] = 1 ORDER BY [id_requisito] DESC;`
     const result = await this.accessService.executeQuery(query);
 
     if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Requisito no encontrado");
@@ -34,7 +34,7 @@ export class RequisitosService {
   }
 
   async findByType(tipo: string): Promise<RequisitoEntity[]> {
-    const query = `SELECT * FROM Requisitos WHERE [tipo] LIKE '%${tipo}%' AND [estado] = 1;`
+    const query = `SELECT * FROM Requisitos WHERE [tipo] LIKE '%${tipo}%' AND [estado] = 1 ORDER BY [id_requisito] DESC;`
 
     const result = await this.accessService.executeQuery(query);
 
@@ -46,7 +46,7 @@ export class RequisitosService {
   }
 
   async findOneByName(nombre: string): Promise<RequisitoEntity[]> {
-    const query = `SELECT * FROM Requisitos WHERE [nombre] LIKE '%${nombre}%' AND [estado] = 1;`
+    const query = `SELECT * FROM Requisitos WHERE [nombre] LIKE '%${nombre}%' AND [estado] = 1 ORDER BY [id_requisito] DESC;`
 
     const result = await this.accessService.executeQuery(query);
 

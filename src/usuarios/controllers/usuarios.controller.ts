@@ -26,13 +26,7 @@ export class UsuariosController {
                 data,
                 message: 'Usuarios encontrados exitosamente',
             };
-        } catch (error) {
-            return {
-                success: false,
-                action: Constants.SELECT,
-                message: error.message
-            };
-        }
+        } catch (error) { throw error }
     }
 
     @Get(':id')
@@ -58,13 +52,7 @@ export class UsuariosController {
                 data,
                 message: 'Usuario encontrado exitosamente',
             };
-        } catch (error) {
-            return {
-                success: false,
-                action: Constants.SELECT,
-                message: error.message
-            };
-        }
+        } catch (error) { throw error }
     }
 
     @Get('nombre_usuario/:nombre_usuario')
@@ -77,13 +65,7 @@ export class UsuariosController {
                 data,
                 message: 'Usuario encontrado exitosamente',
             };
-        } catch (error) {
-            return {
-                success: false,
-                action: Constants.SELECT,
-                message: error.message
-            };
-        }
+        } catch (error) { throw error }
     }
 
     @Post('buscar')
@@ -97,13 +79,7 @@ export class UsuariosController {
                 data,
                 message: 'Usuario encontrado exitosamente',
             };
-        } catch (error) {
-            return {
-                success: false,
-                action: Constants.SELECT,
-                message: error.message
-            };
-        }
+        } catch (error) { throw error }
     }
 
     @Post()

@@ -1,5 +1,6 @@
 import { Transform } from "class-transformer";
-import { IsDateString, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsDateString, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
+import { Role } from "src/assets/environment/roles.enum";
 
 export class CreateUsuarioDto {
 
@@ -77,4 +78,47 @@ export class LoginDto {
     @IsNotEmpty()
     @IsString()
     contraseña: string;
+}
+
+export class RegisterDto {
+
+    @IsNotEmpty()
+    @IsString()
+    @Transform(({ value }) => value?.trim())
+    @Transform(({ value }) => value?.toUpperCase())
+    nombres: string;
+
+    @IsNotEmpty()
+    @IsString()
+    @Transform(({ value }) => value?.trim())
+    @Transform(({ value }) => value?.toUpperCase())
+    apellidos: string;
+
+    @IsNotEmpty()
+    @IsString()
+    @Transform(({ value }) => value?.trim())
+    nombre_usuario: string;
+
+    @IsNotEmpty()
+    @IsString()
+    @MinLength(8)
+    contraseña: string;
+
+    @IsOptional()
+    @IsString()
+    @Transform(({ value }) => value?.trim())
+    cargo: string;
+
+    @IsNotEmpty()
+    @IsEnum(Role)
+    rol: Role;
+
+    @IsOptional()
+    @IsDateString()
+    fecha_creacion?: Date;
+
+    @IsOptional()
+    @IsDateString()
+    fecha_modificacion?: Date;
+
 }

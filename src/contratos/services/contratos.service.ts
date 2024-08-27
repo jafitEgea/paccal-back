@@ -50,7 +50,8 @@ export class ContratosService {
                   FROM ((Contratos
                    INNER JOIN Contratistas ON Contratos.id_contratista = Contratistas.id_contratista)
                    INNER JOIN Personas ON Contratistas.id_contratista = Personas.id_persona)
-                  WHERE Contratos.id_contrato = ${id} AND Contratos.[estado] = 1;`
+                  WHERE Contratos.id_contrato = ${id} AND Contratos.[estado] = 1
+                  ORDER BY [id_contrato] DESC;`
     const result = await this.accessService.executeQuery(query);
     if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Contrato no encontrado");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
@@ -73,7 +74,8 @@ export class ContratosService {
                   FROM ((Contratos
                    INNER JOIN Contratistas ON Contratos.id_contratista = Contratistas.id_contratista)
                    INNER JOIN Personas ON Contratistas.id_contratista = Personas.id_persona)
-                  WHERE Contratos.[num_contrato] LIKE '%${num_contract}%' AND Contratos.[estado] = 1;`
+                  WHERE Contratos.[num_contrato] LIKE '%${num_contract}%' AND Contratos.[estado] = 1
+                  ORDER BY [id_contrato] DESC;`
     const result = await this.accessService.executeQuery(query);
     if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Contrato no encontrado");
     if (JSON.stringify(result).includes('Internal Server Error')) throw new InternalServerErrorException('Error interno');
@@ -96,7 +98,8 @@ export class ContratosService {
                   FROM ((Contratos
                    INNER JOIN Contratistas ON Contratos.id_contratista = Contratistas.id_contratista)
                    INNER JOIN Personas ON Contratistas.id_contratista = Personas.id_persona)
-                  WHERE Contratos.id_contratista = ${id_contratista} AND Contratos.[estado] = 1;`
+                  WHERE Contratos.id_contratista = ${id_contratista} AND Contratos.[estado] = 1
+                  ORDER BY [id_contrato] DESC;`
     const result = await this.accessService.executeQuery(query);
     if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Contrato no encontrado");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
@@ -123,7 +126,8 @@ export class ContratosService {
                     c1.fecha_final = ( SELECT MAX(c2.fecha_final) 
                                        FROM Contratos AS c2 
                                        WHERE c1.id_contratista = c2.id_contratista AND c2.estado = 1)
-                    AND c1.estado = 1;`
+                    AND c1.estado = 1
+                  ORDER BY [id_contrato] DESC;`
     const result = await this.accessService.executeQuery(query);
     if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Contrato no encontrado");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
@@ -146,7 +150,8 @@ export class ContratosService {
                   FROM ((Contratos
                    INNER JOIN Contratistas ON Contratos.id_contratista = Contratistas.id_contratista)
                    INNER JOIN Personas ON Contratistas.id_contratista = Personas.id_persona)
-                  WHERE Personas.nombre & ' ' & Personas.apellidos LIKE '%${name}%' AND Contratos.[estado] = 1;`
+                  WHERE Personas.nombre & ' ' & Personas.apellidos LIKE '%${name}%' AND Contratos.[estado] = 1
+                  ORDER BY [id_contrato] DESC;`
     const result = await this.accessService.executeQuery(query);
     if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Contrato no encontrado");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
@@ -170,7 +175,8 @@ export class ContratosService {
                    INNER JOIN Contratistas ON Contratos.id_contratista = Contratistas.id_contratista)
                    INNER JOIN Personas ON Contratistas.id_contratista = Personas.id_persona)
                   WHERE ( [Personas.nombre] & ' ' & [Personas.apellidos] LIKE '%${nombre_contratista}%' OR [num_contrato] LIKE '%${num_contrato}%' )
-                    AND Contratos.[estado] = 1;`
+                    AND Contratos.[estado] = 1
+                  ORDER BY [id_contrato] DESC;`
     const result = await this.accessService.executeQuery(query);
     if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Contrato o contratista no encontrado");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
@@ -186,7 +192,8 @@ export class ContratosService {
                    INNER JOIN Contratistas ON Contratos.id_contratista = Contratistas.id_contratista)
                    INNER JOIN Personas ON Contratistas.id_contratista = Personas.id_persona)
                   WHERE ( [Personas.nombre] & ' ' & [Personas.apellidos] LIKE '%${nombre_contratista}%' AND [num_contrato] LIKE '%${num_contrato}%' )
-                    AND Contratos.[estado] = 1;`
+                    AND Contratos.[estado] = 1
+                  ORDER BY [id_contrato] DESC;`
     const result = await this.accessService.executeQuery(query);
     if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Contrato o contratista no encontrado");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
