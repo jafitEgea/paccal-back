@@ -20,7 +20,7 @@ export class CuentasCobroRequisitosService {
     const query = `SELECT * from CuentasCobroRequisitos
                    WHERE [id_cuentacobro_requisito] = ${id};`
     const result = await this.accessService.executeQuery(query);
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Requisitos de la cuenta de cobro no encontrados");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Requisitos de la cuenta de cobro no encontrados");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -32,7 +32,7 @@ export class CuentasCobroRequisitosService {
     const query = `SELECT * FROM CuentasCobroRequisitos
                    WHERE [id_cuentacobro] = ${id_cuentacobro} AND [id_requisito] = ${id_requisito};`
     const result = await this.accessService.executeQuery(query);
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Requisitos de la cuenta de cobro no encontrados");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Requisitos de la cuenta de cobro no encontrados");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 

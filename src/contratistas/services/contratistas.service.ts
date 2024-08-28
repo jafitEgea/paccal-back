@@ -25,7 +25,7 @@ export class ContratistasService {
                    ORDER BY [id_contratista] DESC;`
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Contratista(s) no encontrado(s)");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Contratista(s) no encontrado(s)");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -47,7 +47,7 @@ export class ContratistasService {
                    ORDER BY [id_contratista] DESC;`
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Contratista(s) no encontrado(s)");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Contratista(s) no encontrado(s)");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -67,7 +67,7 @@ export class ContratistasService {
                    WHERE Contratistas.id_contratista = ${id} AND [estado] = 1`
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Contratista no encontrado");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Contratista no encontrado");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -88,7 +88,7 @@ export class ContratistasService {
                    ORDER BY [id_contratista] DESC;`
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Contratista no encontrado");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Contratista no encontrado");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -109,7 +109,7 @@ export class ContratistasService {
                    ORDER BY [id_contratista] DESC;`
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Contratista no encontrado");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Contratista no encontrado");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -124,7 +124,7 @@ export class ContratistasService {
                    ORDER BY [id_contratista] DESC;`
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Contratista no encontrado");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Contratista no encontrado");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -139,7 +139,7 @@ export class ContratistasService {
                    ORDER BY [id_contratista] DESC;`
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Contratista no encontrado");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Contratista no encontrado");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -253,7 +253,7 @@ export class ContratistasService {
     // BEGIN TRANSACTION
     await this.accessService.executeTransaction();
 
-    const query = `UPDATE Personas SET estado = 0 WHERE id_persona = ${id}`;
+    const query = `DELETE FROM Personas WHERE id_persona = ${id}`;
     let result = await this.accessService.executeQuery(query);
 
     if (JSON.stringify(query).includes('Error al ejecutar la consulta')) {

@@ -28,7 +28,7 @@ export class UsuariosService {
                        ORDER BY [id_usuario] DESC;`;
         const result = await this.accessService.executeQuery(query);
 
-        if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Usuario(s) no encontrado(s)");
+        if (JSON.stringify(result) == '[]') throw new NotFoundException("Usuario(s) no encontrado(s)");
         if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
         if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -52,7 +52,7 @@ export class UsuariosService {
                        ORDER BY [id_usuario] DESC;`
         const result = await this.accessService.executeQuery(query);
 
-        if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Usuario no encontrado");
+        if (JSON.stringify(result) == '[]') throw new NotFoundException("Usuario no encontrado");
         if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
         if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -75,7 +75,7 @@ export class UsuariosService {
                        ORDER BY [id_usuario] DESC;`;
         const result = await this.accessService.executeQuery(query);
 
-        if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Usuario no encontrado");
+        if (JSON.stringify(result) == '[]') throw new NotFoundException("Usuario no encontrado");
         if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
         if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -98,7 +98,7 @@ export class UsuariosService {
                        ORDER BY [id_usuario] DESC;`;
         const result = await this.accessService.executeQuery(query);
 
-        if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Usuario no encontrado");
+        if (JSON.stringify(result) == '[]') throw new NotFoundException("Usuario no encontrado");
         if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
         if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -124,7 +124,7 @@ export class UsuariosService {
                        ORDER BY [id_usuario] DESC;`;
         const result = await this.accessService.executeQuery(query);
 
-        if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Usuario no encontrado");
+        if (JSON.stringify(result) == '[]') throw new NotFoundException("Usuario no encontrado");
         if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
         if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -257,8 +257,8 @@ export class UsuariosService {
     async delete(id: number) {
         // BEGIN TRANSACTION
         await this.accessService.executeTransaction();
-        // const query =  `DELETE FROM Personas WHERE id_persona = ${id}`;
-        const query = `UPDATE Personas SET estado = 0 WHERE id_persona = ${id}`;
+
+        const query = `DELETE FROM Personas WHERE id_persona = ${id}`;
         await this.accessService.executeQuery(query);
         if (JSON.stringify(query).includes('Error al ejecutar la consulta')) {
             await this.accessService.rollbackTransaction();

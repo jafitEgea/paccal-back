@@ -46,7 +46,7 @@ export class CuentasCobroService {
                    ORDER BY cc.[id_cuentacobro] DESC;`;
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Cuenta(s) de cobro no encontrada(s)");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Cuenta(s) de cobro no encontrada(s)");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -89,7 +89,7 @@ export class CuentasCobroService {
                    ORDER BY cc.[id_cuentacobro] DESC;`;
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Cuenta(s) de cobro no encontrada(s)");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Cuenta(s) de cobro no encontrada(s)");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -113,7 +113,7 @@ export class CuentasCobroService {
   //   const query = `SELECT * FROM CuentasCobro WHERE [estado] = 1 ORDER BY [id_cuentacobro] DESC;`;
   //   const result = await this.accessService.executeQuery(query);
 
-  //   if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Cuenta(s) de cobro no encontrada(s)");
+  //   if (JSON.stringify(result) == '[]') throw new NotFoundException("Cuenta(s) de cobro no encontrada(s)");
   //   if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
   //   if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -159,7 +159,7 @@ export class CuentasCobroService {
   //                  WHERE cc.id_cuentacobro = ${id} AND cc.[estado] = 1;`;
   //   let result = await this.accessService.executeQuery(query);
 
-  //   if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Cuenta(s) de cobro no encontrada(s)");
+  //   if (JSON.stringify(result) == '[]') throw new NotFoundException("Cuenta(s) de cobro no encontrada(s)");
   //   if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
   //   if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -206,7 +206,7 @@ export class CuentasCobroService {
                    ORDER BY cc.[id_cuentacobro] DESC;`;
     let result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Cuenta(s) de cobro no encontrada(s)");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Cuenta(s) de cobro no encontrada(s)");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -265,7 +265,7 @@ export class CuentasCobroService {
                    ORDER BY cc.[id_cuentacobro] DESC;`;
     let result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Cuenta(s) de cobro no encontrada(s)");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Cuenta(s) de cobro no encontrada(s)");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -296,7 +296,7 @@ export class CuentasCobroService {
   //                  WHERE [id_contratista] = ${id_contratista} AND [estado] = 1;`;
   //   let result = await this.accessService.executeQuery(query);
 
-  //   if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Cuenta(s) de cobro no encontrada(s)");
+  //   if (JSON.stringify(result) == '[]') throw new NotFoundException("Cuenta(s) de cobro no encontrada(s)");
   //   if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
   //   if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -667,15 +667,15 @@ export class CuentasCobroService {
     // BEGIN TRANSACTION
     await this.accessService.executeTransaction();
 
-    const query = `UPDATE CuentasCobro SET estado = 0 WHERE id_cuentacobro = ${id}`;
-    let result = await this.accessService.executeQuery(query);
+    const query2 = `DELETE FROM CuentasCobroRequisitos WHERE [id_cuentacobro] = ${id}`;
+    let result = await this.accessService.executeQuery(query2);
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) {
       await this.accessService.rollbackTransaction();
       throw new InternalServerErrorException(JSON.stringify(result));
     }
 
-    const query2 = `DELETE FROM CuentasCobroRequisitos WHERE [id_cuentacobro] = ${id}`;
-    result = await this.accessService.executeQuery(query2);
+    const query = `DELETE FROM CuentasCobro WHERE id_cuentacobro = ${id}`;
+    result = await this.accessService.executeQuery(query);
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) {
       await this.accessService.rollbackTransaction();
       throw new InternalServerErrorException(JSON.stringify(result));

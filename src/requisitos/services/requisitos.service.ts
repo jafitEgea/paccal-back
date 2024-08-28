@@ -13,7 +13,7 @@ export class RequisitosService {
     const query = `SELECT TOP 50 * FROM Requisitos WHERE [estado] = 1 ORDER BY [id_requisito] DESC;`
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Requisito(s) no encontrado(s)");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Requisito(s) no encontrado(s)");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -25,7 +25,7 @@ export class RequisitosService {
                    WHERE [id_requisito] = ${id} AND [estado] = 1 ORDER BY [id_requisito] DESC;`
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Requisito no encontrado");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Requisito no encontrado");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -38,7 +38,7 @@ export class RequisitosService {
 
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Requisito(s) no encontrado(s)");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Requisito(s) no encontrado(s)");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -50,7 +50,7 @@ export class RequisitosService {
 
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Requisito(s) no encontrado(s)");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Requisito(s) no encontrado(s)");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -102,7 +102,7 @@ export class RequisitosService {
   }
 
   async delete(id: number) {
-    const query = `UPDATE Requisitos SET estado = 0 WHERE id_requisito = ${id}`;
+    const query = `DELETE FROM Requisitos WHERE id_requisito = ${id}`;
     const result = await this.accessService.executeQuery(query);
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
     return result;

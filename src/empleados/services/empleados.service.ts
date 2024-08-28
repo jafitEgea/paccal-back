@@ -25,7 +25,7 @@ export class EmpleadosService {
                    ORDER BY [id_empleado] DESC;`
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Empleado(s) no encontrado(s)");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Empleados no encontrados");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -46,7 +46,7 @@ export class EmpleadosService {
                    ORDER BY [id_empleado] DESC;`
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Empleado no encontrado");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Empleado no encontrado");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -67,7 +67,7 @@ export class EmpleadosService {
                    ORDER BY [id_empleado] DESC;`
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Empleado no encontrado");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Empleado no encontrado");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -82,7 +82,7 @@ export class EmpleadosService {
                    ORDER BY [id_empleado] DESC;`
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Empleado no encontrado");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Empleado no encontrado");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -196,8 +196,7 @@ export class EmpleadosService {
     // BEGIN TRANSACTION
     await this.accessService.executeTransaction();
 
-    // const query =  `DELETE FROM Personas WHERE id_persona = ${id}`;
-    const query = `UPDATE Personas SET estado = 0 WHERE id_persona = ${id}`;
+    const query = `DELETE FROM Personas WHERE id_persona = ${id}`;
     let result = await this.accessService.executeQuery(query);
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) {
       await this.accessService.rollbackTransaction();

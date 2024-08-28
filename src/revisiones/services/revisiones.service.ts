@@ -27,7 +27,7 @@ export class RevisionesService {
                        ORDER BY [id_revision] DESC;`
         const result = await this.accessService.executeQuery(query);
 
-        if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Revision(es) no encontrada(s)");
+        if (JSON.stringify(result) == '[]') throw new NotFoundException("Revision(es) no encontrada(s)");
         if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
         if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -51,7 +51,7 @@ export class RevisionesService {
                        ORDER BY [id_revision] DESC;`
 
         const result = await this.accessService.executeQuery(query);
-        if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Revision no encontrada");
+        if (JSON.stringify(result) == '[]') throw new NotFoundException("Revision no encontrada");
         if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
         if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -76,7 +76,7 @@ export class RevisionesService {
                        ORDER BY [id_revision] DESC;`
 
         const result = await this.accessService.executeQuery(query);
-        if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Revision(es) no encontrada(s)");
+        if (JSON.stringify(result) == '[]') throw new NotFoundException("Revision(es) no encontrada(s)");
         if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
         if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -101,7 +101,7 @@ export class RevisionesService {
                        ORDER BY [id_revision] DESC;`
 
         const result = await this.accessService.executeQuery(query);
-        if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Revision(es) no encontrada(s)");
+        if (JSON.stringify(result) == '[]') throw new NotFoundException("Revision(es) no encontrada(s)");
         if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
         if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -168,7 +168,7 @@ export class RevisionesService {
     }
 
     async delete(id: number) {
-        const query = `UPDATE Revisiones SET estado = 0 WHERE [id_revision] = ${id}`;
+        const query = `DELETE FROM Revisiones WHERE [id_revision] = ${id}`;
         const result = await this.accessService.executeQuery(query);
         if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
         return result;

@@ -16,7 +16,7 @@ export class AuditoriaService {
                    ORDER BY [id_auditoria] DESC;`;
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Pistas de auditoría no encontrada");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Pistas de auditoría no encontrada");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -30,7 +30,7 @@ export class AuditoriaService {
                    ORDER BY [id_auditoria] DESC;`;
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Pistas de auditoría no encontrada");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Pista de auditoría no encontrada");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
@@ -50,7 +50,7 @@ export class AuditoriaService {
                    ORDER BY [id_auditoria] DESC;`;
     const result = await this.accessService.executeQuery(query);
 
-    if (JSON.stringify(result).includes('[]')) throw new NotFoundException("Pistas de auditoría no encontradas");
+    if (JSON.stringify(result) == '[]') throw new NotFoundException("Pistas de auditoría no encontradas");
     if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
 
