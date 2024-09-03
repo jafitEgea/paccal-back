@@ -3,7 +3,6 @@ import { IsDateString, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } fro
 import { Role } from "src/assets/environment/roles.enum";
 
 export class CreateUsuarioDto {
-
     @IsNotEmpty()
     @IsString()
     @Transform(({ value }) => value?.trim())
@@ -41,7 +40,6 @@ export class CreateUsuarioDto {
     @IsOptional()
     @IsDateString()
     fecha_modificacion?: Date;
-
 }
 
 export class UserNameDto {

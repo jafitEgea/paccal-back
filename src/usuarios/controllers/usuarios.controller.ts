@@ -12,9 +12,7 @@ import { UsuariosService } from '../services/usuarios.service';
 @Controller('usuarios')
 export class UsuariosController {
 
-    constructor(
-        private usuariosService: UsuariosService,
-    ) { }
+    constructor(private usuariosService: UsuariosService) { }
 
     @Get()
     async getAllUsers() {
@@ -143,7 +141,7 @@ export class UsuariosController {
                 message: 'Usuario eliminado exitosamente',
             };
         } catch (error) {
-            if (String(error).includes("includes related records")) {
+            if (String(error).includes("related records")) {
                 const msg = "Existen registros relacionados a este elemento"
                 throw new BadRequestException(msg);
             }

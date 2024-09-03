@@ -8,35 +8,6 @@ export class AccessService {
     this.connectToDatabase();
   }
 
-  /* async query(query: any, params?: any[]): Promise<any> {
-    return new Promise(res => {
-      const odbc = require('odbc');
-      const connectionConfig = {
-        connectionString: 'DSN=paccal-dns',
-        connectionTimeout: 10,
-        loginTimeout: 10,
-      }
-      
-      const connectionInstance = odbc.connect(connectionConfig, (error: any, connection: any) => {
-        if (error) { console.log(error); res(error); }
-
-        connection.query(query, params, (error: any, result: any) => {
-          if (error) { console.log(error); res(error); }
-
-          res(result);
-
-          connection.close( (error: any) => {
-            if (error) return;
-          });
-
-        });
-
-      });
-
-    });
-
-  }; */
-
   async connectToDatabase() {
     const odbc = require('odbc');
     const connectionConfig = {
@@ -78,5 +49,4 @@ export class AccessService {
   async rollbackTransaction() {
     await this.connection.rollback();
   }
-
 }

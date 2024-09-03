@@ -26,7 +26,18 @@ export class CreateCuentasCobroDto {
 
     @IsOptional()
     @IsString()
+    @Transform(({ value }) => value?.trim())
     oficina_receptora?: string;
+
+    @IsOptional()
+    @IsString()
+    @Transform(({ value }) => value?.trim())
+    @Transform(({ value }) => value?.toUpperCase())
+    nombre_receptor?: string;
+
+    @IsOptional()
+    @IsDateString()
+    fecha_recibido?: Date;
 
     @IsNotEmpty()
     @IsDateString()

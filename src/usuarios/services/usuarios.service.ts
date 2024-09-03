@@ -9,7 +9,6 @@ import * as bcryptjs from 'bcryptjs';
 
 @Injectable()
 export class UsuariosService {
-
     constructor(private accessService: AccessService) { }
 
     async findAll(): Promise<UsuarioEntity[]> {
@@ -105,8 +104,6 @@ export class UsuariosService {
         return result;
     }
 
-    //TODO: LA CONTRASEÑA NO SERA OBTENIDA PUESTO QUE ES UN HASH. CAMPO EDITAR CONTRASEÑA VACIO
-
     async findOneByNameOrUserName({ nombre, nombre_usuario }: UserSearchDto): Promise<UsuarioEntity> {
         const query = `SELECT Usuarios.id_usuario, 
                         Personas.nombre AS nombres, 
@@ -199,7 +196,6 @@ export class UsuariosService {
         return result2;
     }
 
-    //TODO: DESDE EL FRONTED, CAPTURAR EL ERROR CUANDO SE QUIERE ACTULIZAR EL USERNAME POR OTRO USERNAME DE OTRO USUARIO
     async update(id: number, usuario: UpdateUsuarioDto) {
         const { nombres, apellidos, nombre_usuario, contraseña, cargo, rol, fecha_modificacion } = usuario;
         let f_modificacion = null;
@@ -277,5 +273,4 @@ export class UsuariosService {
 
         return result;
     }
-
 }

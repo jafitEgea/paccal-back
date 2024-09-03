@@ -14,6 +14,10 @@ export class CuentasCobroEntity {
 
     oficina_receptora: string;
 
+    nombre_receptor: string;
+
+    fecha_recibido: Date;
+
     fecha_inicial: Date;
 
     fecha_final: Date;

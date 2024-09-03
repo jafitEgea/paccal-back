@@ -27,6 +27,8 @@ export class CuentasCobroService {
                     us.cargo AS cargo_revisor,                    
                     cc.observaciones,
                     cc.oficina_receptora,
+                    cc.nombre_receptor,
+                    cc.fecha_recibido,
                     cc.fecha_inicial,
                     cc.fecha_final,
                     cc.periodo,
@@ -70,6 +72,8 @@ export class CuentasCobroService {
                     us.cargo AS cargo_revisor,                    
                     cc.observaciones,
                     cc.oficina_receptora,
+                    cc.nombre_receptor,
+                    cc.fecha_recibido,
                     cc.fecha_inicial,
                     cc.fecha_final,
                     cc.periodo,
@@ -109,67 +113,6 @@ export class CuentasCobroService {
     return result;
   }
 
-  // async findAll(): Promise<CuentasCobroEntity[]> {
-  //   const query = `SELECT * FROM CuentasCobro WHERE [estado] = 1 ORDER BY [id_cuentacobro] DESC;`;
-  //   const result = await this.accessService.executeQuery(query);
-
-  //   if (JSON.stringify(result) == '[]') throw new NotFoundException("Cuenta(s) de cobro no encontrada(s)");
-  //   if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
-  //   if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
-
-  //   for (let item of result) {
-  //     let id_cuentacobro = item.id_cuentacobro;
-  //     let query2 = `SELECT * FROM CuentasCobroRequisitos
-  //                    WHERE [id_cuentacobro] = ${id_cuentacobro} ;`
-  //     item.requisitos = await this.accessService.executeQuery(query2);
-  //   }
-
-  //   return result;
-  // }
-
-  // async findOne(id: number) {
-  //   const query = `SELECT
-  //                   cc.id_cuentacobro,
-  //                   c.id_contratista,
-  //                   TRIM((p1.nombre & ' ' & p1.apellidos)) AS nombre_contratista,
-  //                   cc.id_contrato,
-  //                   c.num_contrato,
-  //                   c.objeto,
-  //                   cc.id_aprobador,
-  //                   TRIM((p2.nombre & ' ' & p2.apellidos)) AS nombre_aprobador,
-  //                   emp.cargo AS cargo_aprobador,
-  //                   cc.fecha_aprobacion,
-  //                   cc.id_revisor,
-  //                   TRIM((p3.nombre & ' ' & p3.apellidos)) AS nombre_revisor,
-  //                   us.cargo AS cargo_revisor,  
-  //                   cc.observaciones,
-  //                   cc.oficina_receptora,
-  //                   cc.fecha_inicial,
-  //                   cc.fecha_final,
-  //                   cc.periodo,
-  //                   cc.url,
-  //                   cc.fecha_creacion,
-  //                   cc.fecha_modificacion,
-  //                   cc.estado
-  //                  FROM ((((CuentasCobro cc
-  //                   INNER JOIN Contratos c ON cc.id_contrato = c.id_contrato )
-  //                   INNER JOIN Personas p1 ON c.id_contratista = p1.id_persona )
-  //                   INNER JOIN Personas p2 ON cc.id_aprobador = p2.id_persona )
-  //                   INNER JOIN Personas p3 ON cc.id_revisor = p3.id_persona )
-  //                  WHERE cc.id_cuentacobro = ${id} AND cc.[estado] = 1;`;
-  //   let result = await this.accessService.executeQuery(query);
-
-  //   if (JSON.stringify(result) == '[]') throw new NotFoundException("Cuenta(s) de cobro no encontrada(s)");
-  //   if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
-  //   if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
-
-  //   const query2 = `SELECT * FROM CuentasCobroRequisitos
-  //                   WHERE [id_cuentacobro] = ${id} ;`
-  //   result[0].requisitos = await this.accessService.executeQuery(query2);
-
-  //   return result;
-  // }
-
   async findOne(id: number) {
     const query = `SELECT TOP 50
                     cc.id_cuentacobro,
@@ -187,6 +130,8 @@ export class CuentasCobroService {
                     us.cargo AS cargo_revisor,                    
                     cc.observaciones,
                     cc.oficina_receptora,
+                    cc.nombre_receptor,
+                    cc.fecha_recibido,
                     cc.fecha_inicial,
                     cc.fecha_final,
                     cc.periodo,
@@ -240,6 +185,8 @@ export class CuentasCobroService {
                     us.cargo AS cargo_revisor,                    
                     cc.observaciones,
                     cc.oficina_receptora,
+                    cc.nombre_receptor,
+                    cc.fecha_recibido,
                     cc.fecha_inicial,
                     cc.fecha_final,
                     cc.periodo,
@@ -291,25 +238,12 @@ export class CuentasCobroService {
 
   }
 
-  // async findByIdContractor(id_contratista: number) {
-  //   const query = `SELECT * FROM CuentasCobro
-  //                  WHERE [id_contratista] = ${id_contratista} AND [estado] = 1;`;
-  //   let result = await this.accessService.executeQuery(query);
-
-  //   if (JSON.stringify(result) == '[]') throw new NotFoundException("Cuenta(s) de cobro no encontrada(s)");
-  //   if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
-  //   if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
-
-
-  //   return result;
-
-  // }
-
   async accountReceivableExistsForUpdate(body: UpdateCuentasCobroDto) {
     const { id_contrato, id_aprobador, fecha_aprobacion, id_revisor,
-      observaciones, oficina_receptora, fecha_inicial, fecha_final, periodo, url, fecha_creacion, fecha_modificacion, requisitos } = body;
+      observaciones, oficina_receptora, nombre_receptor, fecha_recibido, fecha_inicial, fecha_final, periodo,
+      url, fecha_creacion, fecha_modificacion, requisitos } = body;
 
-    let f_inicial = null, f_final = null, f_aprobacion = null, f_creacion = null, f_modificacion = null;
+    let f_inicial = null, f_final = null, f_recibido = null, f_aprobacion = null, f_creacion = null, f_modificacion = null;
 
     if (!fecha_inicial) throw new BadRequestException("fecha_inicial faltante");
     f_inicial = formatOnlyDateForAccess(fecha_inicial.toString());
@@ -317,13 +251,23 @@ export class CuentasCobroService {
     if (!fecha_final) throw new BadRequestException("fecha_final faltante");
     f_final = formatOnlyDateForAccess(fecha_final.toString());
 
+    if (!fecha_recibido) throw new BadRequestException("fecha_recibido faltante");
+    f_recibido = formatDateForAccess(fecha_recibido.toString());
+
     if (!fecha_creacion) throw new BadRequestException("fecha_creacion faltante");
     f_creacion = formatDateForAccess(fecha_creacion.toString());
 
     if (!fecha_modificacion) throw new BadRequestException("fecha_modificacion faltante");
     f_modificacion = formatDateForAccess(fecha_modificacion.toString());
 
-    let f_aprobacion_cond = null, f_creacion_cond = null, f_modificacion_cond = null;
+    let f_recibido_cond = null, f_aprobacion_cond = null, f_creacion_cond = null, f_modificacion_cond = null;
+    if (fecha_recibido) {
+      f_recibido = formatOnlyDateForAccess(fecha_recibido.toString());
+      f_recibido_cond = `AND [fecha_recibido] = ${f_recibido}`;
+    } else {
+      f_recibido_cond = 'AND [fecha_recibido] IS NULL';
+    }
+
     if (fecha_aprobacion) {
       f_aprobacion = formatOnlyDateForAccess(fecha_aprobacion.toString());
       f_aprobacion_cond = `AND [fecha_aprobacion] = ${f_aprobacion}`;
@@ -345,6 +289,8 @@ export class CuentasCobroService {
       f_modificacion_cond = 'AND [fecha_modificacion] IS NULL';
     }
 
+    let nombre_receptor_cond = nombre_receptor ? `AND [nombre_receptor] = '${nombre_receptor}'` : 'AND [nombre_receptor] IS NULL';
+
     let observaciones_cond = observaciones ? `AND [observaciones] = '${observaciones}'` : 'AND [observaciones] IS NULL';
 
     let periodo_cond = periodo ? `AND [periodo] = '${periodo}'` : 'AND [periodo] IS NULL';
@@ -359,6 +305,8 @@ export class CuentasCobroService {
                     AND [id_revisor] = ${id_revisor}
                     ${observaciones_cond}
                     AND [oficina_receptora] = '${oficina_receptora}'
+                    ${nombre_receptor_cond}
+                    ${f_recibido_cond}
                     AND [fecha_inicial] = ${f_inicial} 
                     AND [fecha_final] = ${f_final}
                     ${periodo_cond}
@@ -441,8 +389,6 @@ export class CuentasCobroService {
     }
     return response;
   }
-
-  /* ------------------- */
 
   async create(cuentaCobro: CreateCuentasCobroDto) {
     const { id_contrato, id_aprobador, fecha_aprobacion, id_revisor,
@@ -555,13 +501,16 @@ export class CuentasCobroService {
 
   async update(id: number, cuentaCobro: UpdateCuentasCobroDto) {
     const { id_contrato, id_aprobador, fecha_aprobacion, id_revisor, observaciones,
-      oficina_receptora, fecha_inicial, fecha_final, periodo, url, fecha_modificacion, requisitos } = cuentaCobro;
-    let f_inicial = null, f_final = null, f_aprobacion = null, f_modificacion = null;
+      oficina_receptora, nombre_receptor, fecha_recibido, fecha_inicial, fecha_final, periodo, url, fecha_modificacion, requisitos } = cuentaCobro;
+
+    let f_inicial = null, f_final = null, f_recibido = null, f_aprobacion = null, f_modificacion = null;
     if (!fecha_inicial) throw new BadRequestException("fecha_inicial faltante");
     f_inicial = formatOnlyDateForAccess(fecha_inicial.toString());
 
     if (!fecha_final) throw new BadRequestException("fecha_final faltante");
     f_final = formatOnlyDateForAccess(fecha_final.toString());
+
+    if (fecha_recibido) f_recibido = formatDateForAccess(fecha_recibido.toString());
 
     if (fecha_aprobacion) f_aprobacion = formatDateForAccess(fecha_aprobacion.toString());
 
@@ -627,6 +576,8 @@ export class CuentasCobroService {
                     [id_revisor] = ${id_revisor},
                     [observaciones] = '${observaciones}',
                     [oficina_receptora] = '${oficina_receptora}',
+                    [nombre_receptor] = '${nombre_receptor}',
+                    [fecha_recibido] = ${f_recibido},
                     [fecha_inicial] = ${f_inicial},
                     [fecha_final] = ${f_final},
                     [periodo] = '${periodo}',

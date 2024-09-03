@@ -122,11 +122,12 @@ export class RequisitosController {
         message: 'Requisito eliminado exitosamente',
       };
     } catch (error) {
-      if (String(error).includes("includes related records")) {
-        const msg = "Existen registros relacionados a este elemento"
+      if (String(error).includes("related records")) {
+        const msg = "Existen registros relacionados a este elemento";
         throw new BadRequestException(msg);
       }
-      throw error;
     }
+
   }
 }
+

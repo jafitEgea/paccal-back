@@ -32,11 +32,4 @@ export class AuthController {
             return await this.authService.login(body);
         } catch (error) { throw error }
     }
-
-    // @Get('profile')
-    // @UseGuards(AuthGuard)
-    // profile(@Request() req) {
-    //     return req.user;
-    // }
-
 }

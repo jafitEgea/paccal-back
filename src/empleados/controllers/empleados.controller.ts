@@ -127,7 +127,7 @@ export class EmpleadosController {
         message: 'Empleado eliminado exitosamente',
       };
     } catch (error) {
-      if (String(error).includes("includes related records")) {
+      if (String(error).includes("related records")) {
         const msg = "Existen registros relacionados a este elemento"
         throw new BadRequestException(msg);
       }

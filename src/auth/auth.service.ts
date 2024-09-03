@@ -19,8 +19,6 @@ export class AuthService {
             throw new BadRequestException("Usuario ya existente");
         }
 
-        // const contraseñaHash = await bcryptjs.hash(contraseña, 10);
-
         return await this.usuariosService.create({
             nombres,
             apellidos,
@@ -58,5 +56,4 @@ export class AuthService {
 
         return response;
     }
-
 }

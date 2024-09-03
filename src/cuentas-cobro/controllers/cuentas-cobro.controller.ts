@@ -195,7 +195,7 @@ export class CuentasCobroController {
   }
 
   @Delete(':id')
-  async DeleteAccountReceivable(@Param('id') id: number) {
+  async deleteAccountReceivable(@Param('id') id: number) {
     try {
       if (!(await this.cuentasCobroService.accountReceivableExistsById(+id))) {
         throw new BadRequestException("Cuenta de cobro no encontrado");
@@ -208,6 +208,12 @@ export class CuentasCobroController {
         data,
         message: 'Cuenta de cobro eliminada exitosamente',
       };
-    } catch (error) { throw error }
+    } catch (error) {
+      if (String(error).includes("related records")) {
+        const msg = "Existen registros relacionados a este elemento"
+        throw new BadRequestException(msg);
+      }
+      throw error;
+    }
   }
 }
