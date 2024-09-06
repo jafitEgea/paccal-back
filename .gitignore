@@ -59,4 +59,4 @@ paccal_db.accdb
 paccal_db.laccdb
 .vscode
 paccal_db_backup.accdb
-*.accdb
+db_paccal.accdb
