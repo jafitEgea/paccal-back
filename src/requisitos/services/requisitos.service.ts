@@ -34,7 +34,7 @@ export class RequisitosService {
   }
 
   async findByType(tipo: string): Promise<RequisitoEntity[]> {
-    const query = `SELECT * FROM Requisitos WHERE [tipo] LIKE '%${tipo}%' AND [estado] = 1 ORDER BY [id_requisito] DESC;`
+    const query = `SELECT * FROM Requisitos WHERE [tipo] LIKE '%${tipo}%' AND [estado] = 1 ORDER BY [nombre] ASC;`
 
     const result = await this.accessService.executeQuery(query);
 

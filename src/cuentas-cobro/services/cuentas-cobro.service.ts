@@ -415,8 +415,8 @@ export class CuentasCobroService {
     // const f_inicial_max_format = getDateAccessFormat(String(fecha_inicial_max));
     // const f_final_max_format = getDateAccessFormat(String(fecha_final_max));
 
-    if (f_inicial_format >= f_final_format) {
-      throw new BadRequestException(`La fecha final debe ser mayor que la fecha inicial`);
+    if (f_inicial_format > f_final_format) {
+      throw new BadRequestException(`La fecha final debe ser mayor o igual que la fecha inicial`);
     }
 
     // //VERIFICO EL CRUZAMIENTO DE FECHAS
@@ -429,25 +429,25 @@ export class CuentasCobroService {
     // }
 
     //VERIFICO LIMITES DEL CONTRATO DE LA CUENTA
-    const { fecha_final_contrato, fecha_inicial_contrato } = await this.datesContract(id_contrato);
-    const f_inicial_contrato_format = getDateAccessFormat(String(fecha_inicial_contrato));
-    const f_final_contrato_format = getDateAccessFormat(String(fecha_final_contrato));
+    // const { fecha_final_contrato, fecha_inicial_contrato } = await this.datesContract(id_contrato);
+    // const f_inicial_contrato_format = getDateAccessFormat(String(fecha_inicial_contrato));
+    // const f_final_contrato_format = getDateAccessFormat(String(fecha_final_contrato));
 
-    if (f_inicial_format < f_inicial_contrato_format) {
-      throw new BadRequestException(`La fecha inicial (${f_inicial_format}) es anterior a la fecha de inicio del contrato (${f_inicial_contrato_format}).`);
-    }
+    // if (f_inicial_format < f_inicial_contrato_format) {
+    //   throw new BadRequestException(`La fecha inicial (${f_inicial_format}) es anterior a la fecha de inicio del contrato (${f_inicial_contrato_format}).`);
+    // }
 
-    if (f_inicial_format > f_final_contrato_format) {
-      throw new BadRequestException(`La fecha inicial (${f_inicial_format}) es posterior a la fecha de terminación del contrato (${f_final_contrato_format}). Considere crear un nuevo contrato.`);
-    }
+    // if (f_inicial_format > f_final_contrato_format) {
+    //   throw new BadRequestException(`La fecha inicial (${f_inicial_format}) es posterior a la fecha de terminación del contrato (${f_final_contrato_format}). Considere crear un nuevo contrato.`);
+    // }
 
-    if (f_final_format < f_inicial_contrato_format) {
-      throw new BadRequestException(`La fecha final (${f_final_format}) es anterior a la fecha de inicio del contrato (${f_inicial_contrato_format}).`);
-    }
+    // if (f_final_format < f_inicial_contrato_format) {
+    //   throw new BadRequestException(`La fecha final (${f_final_format}) es anterior a la fecha de inicio del contrato (${f_inicial_contrato_format}).`);
+    // }
 
-    if (f_final_format > f_final_contrato_format) {
-      throw new BadRequestException(`La fecha final (${f_final_format}) es posterior a la fecha de terminación del contrato (${f_final_contrato_format}). Considere crear un nuevo contrato.`);
-    }
+    // if (f_final_format > f_final_contrato_format) {
+    //   throw new BadRequestException(`La fecha final (${f_final_format}) es posterior a la fecha de terminación del contrato (${f_final_contrato_format}). Considere crear un nuevo contrato.`);
+    // }
 
     // <! --------------------- >
 
@@ -528,8 +528,8 @@ export class CuentasCobroService {
     // const f_inicial_actual_format = getDateAccessFormat(String(fecha_inicial_actual));
     // const f_final_actual_format = getDateAccessFormat(String(fecha_final_actual));
 
-    if (f_inicial_format >= f_final_format) {
-      throw new BadRequestException(`La fecha final debe ser mayor que la fecha inicial`);
+    if (f_inicial_format > f_final_format) {
+      throw new BadRequestException(`La fecha final debe ser mayor o igual que la fecha inicial`);
     }
 
     //VERIFICO EL CRUZAMIENTO DE FECHAS
@@ -544,25 +544,25 @@ export class CuentasCobroService {
     // }
 
     //VERIFICO LIMITES DEL CONTRATO DE LA CUENTA
-    const { fecha_final_contrato, fecha_inicial_contrato } = await this.datesContract(id_contrato);
-    const f_inicial_contrato_format = getDateAccessFormat(String(fecha_inicial_contrato));
-    const f_final_contrato_format = getDateAccessFormat(String(fecha_final_contrato));
+    // const { fecha_final_contrato, fecha_inicial_contrato } = await this.datesContract(id_contrato);
+    // const f_inicial_contrato_format = getDateAccessFormat(String(fecha_inicial_contrato));
+    // const f_final_contrato_format = getDateAccessFormat(String(fecha_final_contrato));
 
-    if (f_inicial_format < f_inicial_contrato_format) {
-      throw new BadRequestException(`La fecha inicial (${f_inicial_format}) es anterior a la fecha de inicio del contrato (${f_inicial_contrato_format}).`);
-    }
+    // if (f_inicial_format < f_inicial_contrato_format) {
+    //   throw new BadRequestException(`La fecha inicial (${f_inicial_format}) es anterior a la fecha de inicio del contrato (${f_inicial_contrato_format}).`);
+    // }
 
-    if (f_inicial_format > f_final_contrato_format) {
-      throw new BadRequestException(`La fecha inicial (${f_inicial_format}) es posterior a la fecha de terminación del contrato (${f_final_contrato_format}). Considere crear un nuevo contrato.`);
-    }
+    // if (f_inicial_format > f_final_contrato_format) {
+    //   throw new BadRequestException(`La fecha inicial (${f_inicial_format}) es posterior a la fecha de terminación del contrato (${f_final_contrato_format}). Considere crear un nuevo contrato.`);
+    // }
 
-    if (f_final_format < f_inicial_contrato_format) {
-      throw new BadRequestException(`La fecha final (${f_final_format}) es anterior a la fecha de inicio del contrato (${f_inicial_contrato_format}).`);
-    }
+    // if (f_final_format < f_inicial_contrato_format) {
+    //   throw new BadRequestException(`La fecha final (${f_final_format}) es anterior a la fecha de inicio del contrato (${f_inicial_contrato_format}).`);
+    // }
 
-    if (f_final_format > f_final_contrato_format) {
-      throw new BadRequestException(`La fecha final (${f_final_format}) es posterior a la fecha de terminación del contrato (${f_final_contrato_format}). Considere crear un nuevo contrato.`);
-    }
+    // if (f_final_format > f_final_contrato_format) {
+    //   throw new BadRequestException(`La fecha final (${f_final_format}) es posterior a la fecha de terminación del contrato (${f_final_contrato_format}). Considere crear un nuevo contrato.`);
+    // }
 
     // <! --------------------- >
 

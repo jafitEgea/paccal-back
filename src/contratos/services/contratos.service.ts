@@ -292,8 +292,8 @@ export class ContratosService {
     // const f_inicial_max_format = getDateAccessFormat(String(fecha_inicial_max));
     // const f_final_max_format = getDateAccessFormat(String(fecha_final_max));
 
-    if (f_inicial_format >= f_final_format) {
-      throw new BadRequestException(`La fecha de terminación debe ser mayor que la fecha de inicio`);
+    if (f_inicial_format > f_final_format) {
+      throw new BadRequestException(`La fecha de terminación debe ser mayor o igual que la fecha de inicio`);
     }
 
     // //VERIFICO EL CRUZAMIENTO DE FECHAS
@@ -341,8 +341,8 @@ export class ContratosService {
     // const f_inicial_actual_format = getDateAccessFormat(String(fecha_inicial_actual));
     // const f_final_actual_format = getDateAccessFormat(String(fecha_final_actual));
 
-    if (f_inicial_format >= f_final_format) {
-      throw new BadRequestException(`La fecha de terminación debe ser mayor que la fecha de inicio`);
+    if (f_inicial_format > f_final_format) {
+      throw new BadRequestException(`La fecha de terminación debe ser mayor o igual que la fecha de inicio`);
     }
     // //VERIFICO EL CRUZAMIENTO DE FECHAS
     // if ((f_inicial_format <= f_inicial_max_format) || (f_inicial_format >= f_inicial_max_format && f_inicial_format <= f_final_max_format)) {
