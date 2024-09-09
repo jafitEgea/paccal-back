@@ -39,11 +39,11 @@ export class CreateCuentasCobroDto {
     @IsDateString()
     fecha_recibido?: Date;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsDateString()
     fecha_inicial: Date;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsDateString()
     fecha_final: Date;
 

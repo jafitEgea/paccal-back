@@ -146,7 +146,6 @@ export class ContratistasService {
     return result;
   }
 
-
   async contractorExists(body: UpdateContratistaDto) {
     const { nombre, apellidos, tipo } = body;
     const query = `SELECT COUNT(*) AS count 

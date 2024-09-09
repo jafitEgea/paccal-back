@@ -324,10 +324,8 @@ export class CuentasCobroService {
 
     let f_inicial = null, f_final = null;
 
-    if (!fecha_inicial) throw new BadRequestException("fecha_inicial faltante");
-    if (!fecha_final) throw new BadRequestException("fecha_final faltante");
-    f_inicial = formatOnlyDateForAccess(fecha_inicial.toString());
-    f_final = formatOnlyDateForAccess(fecha_final.toString());
+    if (fecha_inicial) f_inicial = formatOnlyDateForAccess(fecha_inicial.toString());
+    if (fecha_final) f_final = formatOnlyDateForAccess(fecha_final.toString());
 
     const query = `SELECT Count(*) AS [count]
                    FROM CuentasCobro 
@@ -396,11 +394,9 @@ export class CuentasCobroService {
 
     let f_inicial = null, f_final = null, f_aprobacion = null, f_creacion = null;
 
-    if (!fecha_inicial) throw new BadRequestException("fecha_inicial faltante");
-    f_inicial = formatOnlyDateForAccess(fecha_inicial.toString());
+    if (fecha_inicial) f_inicial = formatOnlyDateForAccess(fecha_inicial.toString());
 
-    if (!fecha_final) throw new BadRequestException("fecha_final faltante");
-    f_final = formatOnlyDateForAccess(fecha_final.toString());
+    if (fecha_final) f_final = formatOnlyDateForAccess(fecha_final.toString());
 
     if (fecha_aprobacion) f_aprobacion = formatDateForAccess(fecha_aprobacion.toString());
 
@@ -467,8 +463,6 @@ export class CuentasCobroService {
 
     const querySelect = `SELECT [id_cuentacobro] FROM CuentasCobro
                          WHERE [id_contrato] = ${id_contrato}
-                          AND [fecha_inicial] = ${f_inicial}
-                          AND [fecha_final] = ${f_final}
                           AND [fecha_creacion] = ${f_creacion}
                          ORDER BY [id_cuentacobro] DESC;`;
     result = await this.accessService.executeQuery(querySelect);
@@ -477,7 +471,6 @@ export class CuentasCobroService {
       await this.accessService.rollbackTransaction();
       throw new InternalServerErrorException(JSON.stringify(result));
     }
-
     const id_cuentacobro = result[0].id_cuentacobro;
 
     let queryRequisito = null;
@@ -504,11 +497,9 @@ export class CuentasCobroService {
       oficina_receptora, nombre_receptor, fecha_recibido, fecha_inicial, fecha_final, periodo, url, fecha_modificacion, requisitos } = cuentaCobro;
 
     let f_inicial = null, f_final = null, f_recibido = null, f_aprobacion = null, f_modificacion = null;
-    if (!fecha_inicial) throw new BadRequestException("fecha_inicial faltante");
-    f_inicial = formatOnlyDateForAccess(fecha_inicial.toString());
+    if (fecha_inicial) f_inicial = formatOnlyDateForAccess(fecha_inicial.toString());
 
-    if (!fecha_final) throw new BadRequestException("fecha_final faltante");
-    f_final = formatOnlyDateForAccess(fecha_final.toString());
+    if (fecha_final) f_final = formatOnlyDateForAccess(fecha_final.toString());
 
     if (fecha_recibido) f_recibido = formatDateForAccess(fecha_recibido.toString());
 

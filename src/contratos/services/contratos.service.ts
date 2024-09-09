@@ -205,10 +205,8 @@ export class ContratosService {
   async contractExists(body: UpdateContratoDto) {
     const { num_contrato, objeto, id_contratista, fecha_inicial, fecha_final } = body;
     let f_inicial = null, f_final = null;
-    if (!fecha_inicial) throw new BadRequestException("fecha_inicial faltante");
-    if (!fecha_final) throw new BadRequestException("fecha_final faltante");
-    f_inicial = formatOnlyDateForAccess(fecha_inicial.toString());
-    f_final = formatOnlyDateForAccess(fecha_final.toString());
+    if (fecha_inicial) f_inicial = formatOnlyDateForAccess(fecha_inicial.toString());
+    if (fecha_final) f_final = formatOnlyDateForAccess(fecha_final.toString());
 
     const query = `SELECT Count(*) AS [count]
                    FROM Contratos
@@ -275,11 +273,9 @@ export class ContratosService {
 
     let f_inicial = null, f_final = null, f_creacion = null;
 
-    if (!fecha_inicial) throw new BadRequestException("fecha_inicial faltante");
-    f_inicial = formatOnlyDateForAccess(fecha_inicial.toString());
+    if (fecha_inicial) f_inicial = formatOnlyDateForAccess(fecha_inicial.toString());
 
-    if (!fecha_final) throw new BadRequestException("fecha_final faltante");
-    f_final = formatOnlyDateForAccess(fecha_final.toString());
+    if (fecha_final) f_final = formatOnlyDateForAccess(fecha_final.toString());
 
     if (!fecha_creacion) throw new BadRequestException("fecha_creacion faltante");
     f_creacion = formatDateForAccess(fecha_creacion.toString());
@@ -318,11 +314,9 @@ export class ContratosService {
 
     let f_inicial = null, f_final = null, f_modificacion = null;
 
-    if (!fecha_inicial) throw new BadRequestException("fecha_inicial faltante");
-    f_inicial = formatOnlyDateForAccess(fecha_inicial.toString());
+    if (fecha_inicial) f_inicial = formatOnlyDateForAccess(fecha_inicial.toString());
 
-    if (!fecha_final) throw new BadRequestException("fecha_final faltante");
-    f_final = formatOnlyDateForAccess(fecha_final.toString());
+    if (fecha_final) f_final = formatOnlyDateForAccess(fecha_final.toString());
 
     if (!fecha_modificacion) throw new BadRequestException("fecha_modificacion faltante");
     f_modificacion = formatDateForAccess(fecha_modificacion.toString());

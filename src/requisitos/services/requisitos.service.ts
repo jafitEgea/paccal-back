@@ -58,10 +58,10 @@ export class RequisitosService {
   }
 
   async requirementExists(body: UpdateRequisitoDto) {
-    const { nombre, tipo } = body;
+    const { nombre, tipo, predeterminado } = body;
     const query = `SELECT COUNT(*) AS count
                    FROM Requisitos 
-                   WHERE [nombre] = '${nombre}' AND [tipo] = '${tipo}' AND [estado] = 1`
+                   WHERE [nombre] = '${nombre}' AND [tipo] = '${tipo}' AND [predeterminado] = ${predeterminado} AND [estado] = 1`
     const result = await this.accessService.executeQuery(query);
     return result[0].count > 0;
 
@@ -76,10 +76,10 @@ export class RequisitosService {
   }
 
   async create(requisito: CreateRequisitoDto) {
-    const { nombre, tipo } = requisito;
+    const { nombre, tipo, predeterminado } = requisito;
 
-    const queryInsert = `INSERT INTO Requisitos(nombre, tipo, estado)
-                         VALUES( '${nombre}', '${tipo}', 1 )`;
+    const queryInsert = `INSERT INTO Requisitos(nombre, tipo, predeterminado, estado)
+                         VALUES( '${nombre}', '${tipo}', ${predeterminado}, 1 )`;
     const result = await this.accessService.executeQuery(queryInsert);
 
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
@@ -88,11 +88,12 @@ export class RequisitosService {
   }
 
   async update(id: number, requisito: UpdateRequisitoDto) {
-    const { nombre, tipo } = requisito;
+    const { nombre, tipo, predeterminado } = requisito;
 
     const query = `UPDATE Requisitos SET
                     [nombre] = '${nombre}',
-                    [tipo] = '${tipo}'
+                    [tipo] = '${tipo}',
+                    [predeterminado] = ${predeterminado}
                    WHERE [id_requisito] = ${id};`;
     const result = await this.accessService.executeQuery(query);
 
@@ -105,6 +106,7 @@ export class RequisitosService {
     const query = `DELETE FROM Requisitos WHERE id_requisito = ${id}`;
     const result = await this.accessService.executeQuery(query);
     if (JSON.stringify(result).includes('Error al ejecutar la consulta')) throw new InternalServerErrorException(JSON.stringify(result));
+    console.log(result)
     return result;
   }
 }

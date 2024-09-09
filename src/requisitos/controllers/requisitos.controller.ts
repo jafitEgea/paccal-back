@@ -126,6 +126,7 @@ export class RequisitosController {
         const msg = "Existen registros relacionados a este elemento";
         throw new BadRequestException(msg);
       }
+      throw error;
     }
 
   }

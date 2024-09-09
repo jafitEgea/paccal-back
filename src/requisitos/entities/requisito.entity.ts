@@ -6,4 +6,6 @@ export class RequisitoEntity {
 
     tipo: string;
 
+    predeterminado: number;
+
 }

@@ -17,11 +17,11 @@ export class CreateContratoDto {
     @IsPositive()
     id_contratista: number;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsDateString()
     fecha_inicial: Date;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsDateString()
     fecha_final: Date;
 
