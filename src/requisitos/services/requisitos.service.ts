@@ -58,10 +58,10 @@ export class RequisitosService {
   }
 
   async requirementExists(body: UpdateRequisitoDto) {
-    const { nombre, tipo, predeterminado } = body;
+    const { nombre, tipo } = body;
     const query = `SELECT COUNT(*) AS count
                    FROM Requisitos 
-                   WHERE [nombre] = '${nombre}' AND [tipo] = '${tipo}' AND [predeterminado] = ${predeterminado} AND [estado] = 1`
+                   WHERE [nombre] = '${nombre}' AND [tipo] = '${tipo}' AND [estado] = 1`
     const result = await this.accessService.executeQuery(query);
     return result[0].count > 0;
 
