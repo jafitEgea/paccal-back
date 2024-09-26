@@ -67,6 +67,16 @@ export class RequisitosService {
 
   }
 
+  async createdRequirementExists(body: UpdateRequisitoDto, id: number) {
+    const { nombre, tipo } = body;
+    const query = `SELECT COUNT(*) AS count
+                   FROM Requisitos 
+                   WHERE [id_requisito] = ${id} AND [nombre] = '${nombre}' AND [tipo] = '${tipo}' AND [estado] = 1`
+    const result = await this.accessService.executeQuery(query);
+    return result[0].count > 0;
+
+  }
+
   async requirementExistsById(id: number) {
     const query = `SELECT COUNT(*) AS count
                    FROM Requisitos 

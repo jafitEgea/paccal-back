@@ -95,7 +95,7 @@ export class RequisitosController {
       if (!(await this.requisitosService.requirementExistsById(+id))) {
         throw new BadRequestException("Requisito no encontrado");
       }
-      if (await this.requisitosService.requirementExists(body)) {
+      if (!(await this.requisitosService.createdRequirementExists(body, id)) && await this.requisitosService.requirementExists(body)) {
         throw new BadRequestException("Requisito ya existente");
       }
       const data = await this.requisitosService.update(+id, body);
