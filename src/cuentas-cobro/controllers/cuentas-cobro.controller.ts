@@ -145,9 +145,6 @@ export class CuentasCobroController {
             throw new BadRequestException(`Requisito con id ${item.id_requisito} no encontrado`)
         }
       }
-      if (await this.cuentasCobroService.accountReceivableExists(body)) {
-        throw new BadRequestException("Cuenta de cobro ya existente");
-      }
       const data = await this.cuentasCobroService.create(body);
       return {
         success: true,
