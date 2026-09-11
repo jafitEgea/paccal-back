@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
-import { RequisitosService } from './services/requisitos.service';
 import { RequisitosController } from './controllers/requisitos.controller';
-import { AccessService } from 'src/access/access.service';
+import { RequisitosService } from './services/requisitos.service';
 
 @Module({
   controllers: [RequisitosController],
-  providers: [RequisitosService, AccessService],
+  providers: [RequisitosService],
 })
 export class RequisitosModule {}

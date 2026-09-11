@@ -20,7 +20,7 @@ export class RequisitosService {
     return result;
   }
 
-  async findOne(id: number): Promise<RequisitoEntity> {
+  async findOne(id: number): Promise<RequisitoEntity[]> {
     const query = `SELECT * FROM Requisitos
                    WHERE [id_requisito] = ${id} AND [estado] = 1 ORDER BY [id_requisito] DESC;`
     const result = await this.accessService.executeQuery(query);

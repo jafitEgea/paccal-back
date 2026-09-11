@@ -10,9 +10,15 @@ import { EmpleadosModule } from './empleados/empleados.module';
 import { RequisitosModule } from './requisitos/requisitos.module';
 import { RevisionesModule } from './revisiones/revisiones.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
+import { ConfigModule } from '@nestjs/config';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     AccessModule,
     AuditoriaModule,
     AuthModule,
@@ -26,6 +32,11 @@ import { UsuariosModule } from './usuarios/usuarios.module';
     UsuariosModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseInterceptor,
+    }
+  ],
 })
 export class AppModule { }

@@ -10,7 +10,7 @@ export class EmpleadosService {
 
   constructor(private accessService: AccessService) { }
 
-  async findAll(): Promise<EmpleadoEntity> {
+  async findAll(): Promise<EmpleadoEntity[]> {
     const query = `SELECT TOP 50 
                     Empleados.id_empleado,
                     Personas.nombre AS nombres,

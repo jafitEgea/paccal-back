@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ContratistasService } from './services/contratistas.service';
 import { ContratistasController } from './controllers/contratistas.controller';
-import { AccessService } from 'src/access/access.service';
+import { ContratistasService } from './services/contratistas.service';
 
 @Module({
   controllers: [ContratistasController],
-  providers: [ContratistasService, AccessService],
+  providers: [ContratistasService],
 })
 export class ContratistasModule {}

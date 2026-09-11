@@ -35,7 +35,7 @@ export class UsuariosService {
         return result;
     }
 
-    async findOne(id: number): Promise<UsuarioEntity> {
+    async findOne(id: number): Promise<UsuarioEntity[]> {
         const query = `SELECT Usuarios.id_usuario, 
                         Personas.nombre AS nombres, 
                         Personas.apellidos, 
@@ -58,7 +58,7 @@ export class UsuariosService {
         return result;
     }
 
-    async findOneByUserName(username: string): Promise<UsuarioEntity> {
+    async findOneByUserName(username: string): Promise<UsuarioEntity[]> {
         const query = `SELECT Usuarios.id_usuario, 
                         Personas.nombre AS nombres, 
                         Personas.apellidos, 
@@ -81,7 +81,7 @@ export class UsuariosService {
         return result;
     }
 
-    async findOneByFullName(fullName: string): Promise<UsuarioEntity> {
+    async findOneByFullName(fullName: string): Promise<UsuarioEntity[]> {
         const query = `SELECT Usuarios.id_usuario, 
                         Personas.nombre AS nombres, 
                         Personas.apellidos, 
@@ -104,7 +104,7 @@ export class UsuariosService {
         return result;
     }
 
-    async findOneByNameOrUserName({ nombre, nombre_usuario }: UserSearchDto): Promise<UsuarioEntity> {
+    async findOneByNameOrUserName({ nombre, nombre_usuario }: UserSearchDto): Promise<UsuarioEntity[]> {
         const query = `SELECT Usuarios.id_usuario, 
                         Personas.nombre AS nombres, 
                         Personas.apellidos, 
