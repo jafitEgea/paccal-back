@@ -58,7 +58,7 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 paccal_db.accdb
 paccal_db.laccdb
 .vscode
-paccal_db_backup.accdb
-db_paccal.accdb
+# db_paccal.accdb
+db_paccal.laccdb
 
 /proyecto

@@ -160,40 +160,23 @@ export class UsuariosService {
 
         f_creacion = formatDateForAccess(fecha_creacion.toString());
 
-        // BEGIN TRANSACTION
-        await this.accessService.executeTransaction();
+        return this.accessService.transaction(async (tx) => {
+            const queryInsert = `INSERT INTO Personas(nombre, apellidos, fecha_creacion, estado)
+                                 VALUES( '${nombres}', '${apellidos}', ${f_creacion}, 1 )`;
+            await tx.execute(queryInsert);
 
-        const queryInsert = `INSERT INTO Personas(nombre, apellidos, fecha_creacion, estado)
-                             VALUES( '${nombres}', '${apellidos}', ${f_creacion}, 1 )`;
-        let result = await this.accessService.executeQuery(queryInsert);
+            const resultId = await tx.query<{ id_persona: number }>(
+                'SELECT @@IDENTITY AS id_persona;'
+            );
 
-        if (JSON.stringify(result).includes('Error al ejecutar la consulta')) {
-            await this.accessService.rollbackTransaction();
-            throw new InternalServerErrorException(JSON.stringify(result));
-        }
+            const id_persona = resultId[0].id_persona;
 
-        const querySelect = `SELECT [id_persona] FROM [Personas] 
-                             WHERE [fecha_creacion] = ${f_creacion} 
-                             ORDER BY [id_persona] DESC;`;
-        result = await this.accessService.executeQuery(querySelect);
+            const contraseñaHash = await bcryptjs.hash(contraseña, 10);
 
-        if (JSON.stringify(result).includes('Error al ejecutar la consulta')) {
-            await this.accessService.rollbackTransaction();
-            throw new InternalServerErrorException(JSON.stringify(result));
-        }
-
-        const id_persona = result[0].id_persona;
-
-        const contraseñaHash = await bcryptjs.hash(contraseña, 10);
-
-        const queryInsert2 = `INSERT INTO Usuarios(id_usuario, nombre_usuario, contraseña, cargo, rol)
-                              VALUES( ${id_persona} , '${nombre_usuario}', '${contraseñaHash}', '${cargo}','${rol}' )`;
-        const result2 = await this.accessService.executeQuery(queryInsert2);
-
-        // END TRANSACTION
-        await this.accessService.commitTransaction();
-
-        return result2;
+            const queryInsert2 = `INSERT INTO Usuarios(id_usuario, nombre_usuario, contraseña, cargo, rol)
+                                  VALUES( ${id_persona} , '${nombre_usuario}', '${contraseñaHash}', '${cargo}','${rol}' )`;
+            return await tx.execute(queryInsert2);
+        });
     }
 
     async update(id: number, usuario: UpdateUsuarioDto) {
@@ -203,74 +186,44 @@ export class UsuariosService {
         if (!fecha_modificacion) throw new BadRequestException("fecha_modificacion faltante");
         f_modificacion = formatDateForAccess(fecha_modificacion.toString());
 
-        // BEGIN TRANSACTION
-        await this.accessService.executeTransaction();
+        return this.accessService.transaction(async (tx) => {
+            const query = `UPDATE Personas SET 
+                            [nombre] = '${nombres}', 
+                            [apellidos] = '${apellidos}',
+                            [fecha_modificacion] = ${f_modificacion}
+                           WHERE [id_persona] = ${id};`;
 
-        const query = `UPDATE Personas SET 
-                        [nombre] = '${nombres}', 
-                        [apellidos] = '${apellidos}',
-                        [fecha_modificacion] = ${f_modificacion}
-                       WHERE [id_persona] = ${id};`;
+            await tx.execute(query);
 
-        let result = await this.accessService.executeQuery(query);
+            let cond = null;
+            if (contraseña) {
+                const contraseñaHash = await bcryptjs.hash(contraseña, 10);
 
-        if (JSON.stringify(result).includes('Error al ejecutar la consulta')) {
-            await this.accessService.rollbackTransaction();
-            throw new InternalServerErrorException(JSON.stringify(result));
-        }
+                cond = `[nombre_usuario] = '${nombre_usuario}',
+                        [contraseña] = '${contraseñaHash}',
+                        [cargo] = '${cargo}',
+                        [rol] = '${rol}'`
+            } else {
+                cond = `[nombre_usuario] = '${nombre_usuario}',
+                        [cargo] = '${cargo}',
+                        [rol] = '${rol}'`
+            }
 
-        let cond = null;
-        if (contraseña) {
-            const contraseñaHash = await bcryptjs.hash(contraseña, 10);
+            const query2 = `UPDATE Usuarios SET
+                              ${cond}
+                            WHERE [id_usuario] = ${id}`;
 
-            cond = `[nombre_usuario] = '${nombre_usuario}',
-                    [contraseña] = '${contraseñaHash}',
-                    [cargo] = '${cargo}',
-                    [rol] = '${rol}'`
-        } else {
-            cond = `[nombre_usuario] = '${nombre_usuario}',
-                    [cargo] = '${cargo}',
-                    [rol] = '${rol}'`
-        }
-
-        const query2 = `UPDATE Usuarios SET
-                          ${cond}
-                        WHERE [id_usuario] = ${id}`;
-
-        result = await this.accessService.executeQuery(query2);
-
-        if (JSON.stringify(result).includes('Error al ejecutar la consulta')) {
-            await this.accessService.rollbackTransaction();
-            throw new InternalServerErrorException(JSON.stringify(result));
-        }
-
-        // END TRANSACTION
-        await this.accessService.commitTransaction();
-
-        return result;
+            return await tx.execute(query2);
+        });
     }
 
     async delete(id: number) {
-        // BEGIN TRANSACTION
-        await this.accessService.executeTransaction();
+        return this.accessService.transaction(async (tx) => {
+            const query = `DELETE FROM Personas WHERE id_persona = ${id}`;
+            await tx.execute(query);
 
-        const query = `DELETE FROM Personas WHERE id_persona = ${id}`;
-        await this.accessService.executeQuery(query);
-        if (JSON.stringify(query).includes('Error al ejecutar la consulta')) {
-            await this.accessService.rollbackTransaction();
-            throw new InternalServerErrorException(JSON.stringify(query));
-        }
-
-        const query2 = `DELETE FROM Usuarios WHERE id_usuario = ${id}`;
-        const result = await this.accessService.executeQuery(query2);
-        if (JSON.stringify(result).includes('Error al ejecutar la consulta')) {
-            await this.accessService.rollbackTransaction();
-            throw new InternalServerErrorException(JSON.stringify(result));
-        }
-
-        // END TRANSACTION
-        await this.accessService.commitTransaction();
-
-        return result;
+            const query2 = `DELETE FROM Usuarios WHERE id_usuario = ${id}`;
+            return await tx.execute(query2);
+        });
     }
 }

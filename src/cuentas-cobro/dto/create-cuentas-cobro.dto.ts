@@ -1,5 +1,5 @@
-import { Transform } from "class-transformer";
-import { IsArray, IsDateString, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString } from "class-validator";
+import { Transform, Type } from "class-transformer";
+import { IsArray, IsDateString, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, ValidateNested } from "class-validator";
 import { CreateCuentasCobroRequisitoDto } from "src/cuentas-cobro-requisitos/dto/create-cuentas-cobro-requisito.dto";
 
 export class CreateCuentasCobroDto {
@@ -66,6 +66,8 @@ export class CreateCuentasCobroDto {
     fecha_modificacion?: Date;
 
     @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => CreateCuentasCobroRequisitoDto)
     requisitos: CreateCuentasCobroRequisitoDto[];
 }
 

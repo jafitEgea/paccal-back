@@ -15,6 +15,7 @@
  *   - Una sola instancia por árbol de módulos
  *   - Pool de conexiones compartido
  *   - Acceso global via @Global() en AccessModule
+ *   - Inicialización lazy del pool (ensurePool) para no bloquear el arranque
  *
  * POR QUÉ SINGLETON Y NO OTRO:
  *   El problema es de "recurso compartido con restricción física" (locking de archivo).
@@ -28,13 +29,27 @@
  *
  * DESPUÉS: Esta clase IMPLEMENTA la interfaz DatabaseGateway y TRADUCE
  *   entre ODBC y el dominio:
- *   - pool.query() → gateway.query()
- *   - connection.transaction() → gateway.transaction()
+ *   - pool.query() → gateway.query()          (SELECT)
+ *   - connection.query() → gateway.execute()   (INSERT/UPDATE/DELETE)
+ *   - connection.transaction() → gateway.transaction(callback)  (TRANSACTION)
  *   - errores ODBC → InternalServerErrorException
  *
  * POR QUÉ ADAPTER Y NO BRIDGE:
  *   Bridge separa abstracción de implementación en dos dimensiones.
  *   Aquí solo hay una: traducir vocabulario. Adapter es más simple y adecuado.
+ *
+ * PATRÓN 2a: TRANSACTION CALLBACK ( errorCallback)
+ * ──────────────────────────────────────────────────
+ * El método transaction() usa un CALLBACK en vez de begin/commit/rollback manuales:
+ *   await gateway.transaction(async (tx) => {
+ *     await tx.execute('INSERT ...');
+ *     const id = await tx.query('SELECT @@IDENTITY ...');
+ *     await tx.execute('INSERT ...');
+ *   });
+ * → Si el callback lanza excepción, se hace ROLLBACK automático.
+ * → Si termina OK, se hace COMMIT automático.
+ * → La conexión se cierra siempre en el bloque finally.
+ * → Más seguro que begin/commit/rollback manuales (olvidar rollback = bug silencioso).
  * ============================================================================
  */
 
@@ -79,7 +94,7 @@ export class OdbcDatabaseGateway implements DatabaseGateway, OnModuleDestroy {
      * Crea el pool de conexiones ODBC.
      */
     private async createPool(): Promise<void> {
-        // CONFIGURAR DSN EN EL PC:
+        // CONFIGURAR DSN EN WINDOWS:
         // Orígenes de datos ODBC 64-bit
         // DSN: paccal-dns
 

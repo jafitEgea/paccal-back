@@ -170,42 +170,21 @@ export class ContratistasService {
     if (!fecha_creacion) throw new BadRequestException("fecha_creacion faltante");
     f_creacion = formatDateForAccess(fecha_creacion.toString());
 
-    // BEGIN TRANSACTION
-    await this.accessService.executeTransaction();
+    return this.accessService.transaction(async (tx) => {
+      const queryInsert = `INSERT INTO Personas(nombre, apellidos, fecha_creacion, estado)
+                           VALUES( '${nombre}', '${apellidos}', ${f_creacion}, 1 )`;
+      await tx.execute(queryInsert);
 
-    const queryInsert = `INSERT INTO Personas(nombre, apellidos, fecha_creacion, estado)
-                         VALUES( '${nombre}', '${apellidos}', ${f_creacion}, 1 )`;
-    let result = await this.accessService.executeQuery(queryInsert);
-    if (JSON.stringify(result).includes('Error al ejecutar la consulta')) {
-      await this.accessService.rollbackTransaction();
-      throw new InternalServerErrorException(JSON.stringify(result));
-    }
+      const resultId = await tx.query<{ id_persona: number }>(
+        'SELECT @@IDENTITY AS id_persona;'
+      );
 
-    const querySelect = `SELECT [id_persona] FROM [Personas] 
-                         WHERE [fecha_creacion] = ${f_creacion} 
-                         ORDER BY [id_persona] DESC;`;
-    result = await this.accessService.executeQuery(querySelect);
-    if (JSON.stringify(result).includes('Error al ejecutar la consulta')) {
-      await this.accessService.rollbackTransaction();
-      throw new InternalServerErrorException(JSON.stringify(result));
-    }
+      const id_persona = resultId[0].id_persona;
 
-    const id_persona = result[0].id_persona;
-
-    const queryInsert2 = `INSERT INTO Contratistas(id_contratista, tipo)
-                          VALUES( ${id_persona}, '${tipo}')`;
-    result = await this.accessService.executeQuery(queryInsert2);
-    if (JSON.stringify(result).includes('Error al ejecutar la consulta')) {
-      await this.accessService.rollbackTransaction();
-      throw new InternalServerErrorException(JSON.stringify(result));
-    }
-
-    // END TRANSACTION
-    await this.accessService.commitTransaction();
-
-    if (JSON.stringify(result).includes('Internal server error')) throw new InternalServerErrorException('Error interno');
-
-    return result;
+      const queryInsert2 = `INSERT INTO Contratistas(id_contratista, tipo)
+                            VALUES( ${id_persona}, '${tipo}')`;
+      return await tx.execute(queryInsert2);
+    });
   }
 
   async update(id: number, contratista: UpdateContratistaDto) {
@@ -215,62 +194,28 @@ export class ContratistasService {
     if (!fecha_modificacion) throw new BadRequestException("fecha_modificacion faltante");
     f_modificacion = formatDateForAccess(fecha_modificacion.toString());
 
-    // BEGIN TRANSACTION
-    await this.accessService.executeTransaction();
+    return this.accessService.transaction(async (tx) => {
+      const query = `UPDATE Personas SET 
+                      [nombre] = '${nombre}', 
+                      [apellidos] = '${apellidos}',
+                      [fecha_modificacion] = ${f_modificacion}
+                     WHERE [id_persona] = ${id};`;
+      await tx.execute(query);
 
-    const query = `UPDATE Personas SET 
-                    [nombre] = '${nombre}', 
-                    [apellidos] = '${apellidos}',
-                    [fecha_modificacion] = ${f_modificacion}
-                   WHERE [id_persona] = ${id};`;
-    let result = await this.accessService.executeQuery(query);
-
-    if (JSON.stringify(result).includes('Error al ejecutar la consulta')) {
-      await this.accessService.rollbackTransaction();
-      throw new InternalServerErrorException(JSON.stringify(result));
-    }
-
-    const query2 = `UPDATE Contratistas SET
-                    [tipo] = '${tipo}'
-                    WHERE [id_contratista] = ${id}`;
-
-    result = await this.accessService.executeQuery(query2);
-
-    if (JSON.stringify(result).includes('Error al ejecutar la consulta')) {
-      await this.accessService.rollbackTransaction();
-      throw new InternalServerErrorException(JSON.stringify(result));
-    }
-
-    // END TRANSACTION
-    await this.accessService.commitTransaction();
-
-    return result;
+      const query2 = `UPDATE Contratistas SET
+                      [tipo] = '${tipo}'
+                      WHERE [id_contratista] = ${id}`;
+      return await tx.execute(query2);
+    });
   }
 
   async delete(id: number) {
+    return this.accessService.transaction(async (tx) => {
+      const query = `DELETE FROM Personas WHERE id_persona = ${id}`;
+      await tx.execute(query);
 
-    // BEGIN TRANSACTION
-    await this.accessService.executeTransaction();
-
-    const query = `DELETE FROM Personas WHERE id_persona = ${id}`;
-    let result = await this.accessService.executeQuery(query);
-
-    if (JSON.stringify(query).includes('Error al ejecutar la consulta')) {
-      await this.accessService.rollbackTransaction();
-      throw new InternalServerErrorException(JSON.stringify(query));
-    }
-
-    const query2 = `DELETE FROM Contratistas WHERE id_contratista = ${id}`;
-    result = await this.accessService.executeQuery(query2);
-
-    if (JSON.stringify(query).includes('Error al ejecutar la consulta')) {
-      await this.accessService.rollbackTransaction();
-      throw new InternalServerErrorException(JSON.stringify(query));
-    }
-
-    // END TRANSACTION
-    await this.accessService.commitTransaction();
-
-    return result;
+      const query2 = `DELETE FROM Contratistas WHERE id_contratista = ${id}`;
+      return await tx.execute(query2);
+    });
   }
 }

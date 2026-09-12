@@ -16,6 +16,13 @@
  *   El adaptador concreto (OdbcDatabaseGateway) traduce entre ODBC y esta interfaz.
  *   El consumidor (AccessService) depende de la interfaz, no de la implementación.
  *
+ * TRANSACTION CALLBACK:
+ *   El método transaction() acepta un callback que recibe un TransactionContext.
+ *   Si el callback completa sin errores → COMMIT automático.
+ *   Si el callback lanza excepción → ROLLBACK automático.
+ *   La conexión se cierra siempre (finally).
+ *   → Más seguro que begin/commit/rollback manuales.
+ *
  * BENEFICIOS:
  *   1. Desacoplamiento: cambiar de BD = nuevo adaptador, sin tocar servicios.
  *   2. Testeabilidad: overrideProvider(DATABASE_GATEWAY) para tests unitarios.

@@ -52,11 +52,11 @@ export abstract class CuentaCobroValidator {
      * CHAIN: Ejecuta la validación y delega al siguiente eslabón.
      * Si check() lanza una excepción, la cadena se DETIENE ahí.
      */
-    async validate(body: UpdateCuentasCobroDto, tx?: DatabaseGateway): Promise<void> {
-        await this.check(body, tx);  // Ejecuta validación concreta
+    async validate(body: UpdateCuentasCobroDto): Promise<void> {
+        await this.check(body);  // Ejecuta validación concreta
 
         if (this.next) {
-            await this.next.validate(body, tx);  // Delega al siguiente
+            await this.next.validate(body);  // Delega al siguiente
         }
     }
 
@@ -64,6 +64,6 @@ export abstract class CuentaCobroValidator {
      * Cada eslabón concreto implementa su propia lógica de validación.
      * Si falla, lanza BadRequestException y detiene la cadena.
      */
-    protected abstract check(body: UpdateCuentasCobroDto, tx?: DatabaseGateway): Promise<void>;
+    protected abstract check(body: UpdateCuentasCobroDto): Promise<void>;
 
 }

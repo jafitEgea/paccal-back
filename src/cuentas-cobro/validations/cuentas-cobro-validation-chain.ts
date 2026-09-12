@@ -65,7 +65,7 @@ export class CuentasCobroValidationChain {
      * CHAIN: Ejecuta toda la cadena de validaciones.
      * Si algún eslabón falla, lanza excepción y se detiene.
      */
-    async validate(body: UpdateCuentasCobroDto, tx?: DatabaseGateway): Promise<void> {
-        await this.chain.validate(body, tx);
+    async validate(body: UpdateCuentasCobroDto): Promise<void> {
+        await this.chain.validate(body);
     }
 }
